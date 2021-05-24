@@ -1,0 +1,20 @@
+{
+  "name": "pitcher-plant",
+  "version": "0.0.1",
+  "description": "LilyPond preprocessor",
+  "main": "bin/index.js",
+  "repository": "git@gitlab.com:tinpan-io/pitcher-plant.git",
+  "author": "Andy Chase <andychase@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "handlebars": "^4.7.7",
+    "yaml-front-matter": "^4.1.1"
+  },
+  "bin": {
+    "pplant": "bin/index.js"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0"
+  }
+}
