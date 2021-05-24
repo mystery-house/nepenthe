@@ -3,3 +3,4 @@ node_modules/*
 ._*
 *~
 test.ly*
+coverage/*
