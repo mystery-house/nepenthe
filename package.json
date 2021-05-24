@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "LilyPond preprocessor",
   "main": "bin/index.js",
+  "homepage": "https://gitlab.com/tinpan-io/pitcher-plant",
   "repository": "git@gitlab.com:tinpan-io/pitcher-plant.git",
   "author": "Andy Chase <andychase@gmail.com>",
   "license": "MIT",
