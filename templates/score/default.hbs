@@ -4,5 +4,8 @@
     basic Lilypond \score{} block.
 ~--}}
 \score {
+    {{~#if transpose}}
+    \transpose {{{transpose}}}
+    {{/if~}}
     {{{__content}}}
 }
