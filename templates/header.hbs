@@ -1,6 +1,7 @@
 \version "{{version}}"
 
 % Preprocessed by Pitcher Plant v{{pplantVersion}}
+% <{{homepage}}>
 {{#if midi_file_ext}}
 #(ly:set-option 'midi-extension "{{{midi_file_ext}}}")
 {{/if}}
@@ -36,7 +37,7 @@
 {{~#if tagline}}
   tagline = "{{tagline}}"
 {{~else}}
-  tagline = "Pre-processed with PitcherPlant v{{pplantVersion}}"
+  tagline = \markup {\with-url #"{{homepage}}" "Pre-processed with PitcherPlant"}
 {{/if ~}}
 {{~#if copyright}}
   copyright = "{{copyright}}"
