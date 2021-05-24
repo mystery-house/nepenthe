@@ -1,3 +1,8 @@
 **/node_modules/
 .vscode/
-test.*
+test.ly
+test.lyp
+test.png
+test.pdf
+test.mid
+test.midi

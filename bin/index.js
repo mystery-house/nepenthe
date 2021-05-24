@@ -27,6 +27,11 @@ fs.readFile(inputFile, 'utf8', (err, data) => {
         return
     }
     let fm = yamlFront.loadFront(data)
+    
+    // Unfold midi repeats by default
+    if(fm.midi && fm.midi_unfold_repeats == undefined) {
+        fm.midi_unfold_repeats = true
+    }
 
     let outputData = lilypond.render(fm)
 
