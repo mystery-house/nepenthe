@@ -8,7 +8,7 @@ const parser = new ArgumentParser({
     description: 'PitcherPlant - Lilypond pre-processor'
 });
 parser.add_argument({dest: 'inputFile', help: 'the path to the file to be processed'})
-
+parser.add_argument({dest: 'outputFile', help: 'the path to the output file. (use `-` to send output to STDOUT.)'})
 let args = parser.parse_args()
 
 if(!fs.existsSync(args.inputFile)) {
@@ -22,5 +22,13 @@ fs.readFile(args.inputFile, 'utf8', (err, data) => {
         return
     }
     let fm = yamlFront.loadFront(data)
-    process.stdout.write(lilypond.render(fm))
+
+    let outputData = lilypond.render(fm)
+
+    if(args.outputFile == '-') {
+        process.stdout.write(outputData)
+    }
+    else {
+        fs.writeFileSync(args.outputFile, outputData)
+    }
 });
