@@ -1,6 +1,9 @@
 \version "{{version}}"
 
 % Preprocessed by Pitcher Plant
+{{#if midi_file_ext}}
+#(ly:set-option 'midi-extension "{{{midi_file_ext}}}")
+{{/if}}
 
 \header {
 {{#if dedication }}
