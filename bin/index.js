@@ -3,6 +3,8 @@ const { ArgumentParser } = require('argparse')
 const yamlFront = require('yaml-front-matter');
 const lilypond = require('../lilypond.js')
 const { exit } = require('process');
+const { version } = require('../package.json')
+
 
 const parser = new ArgumentParser({
     description: 'PitcherPlant - Lilypond pre-processor'
@@ -27,7 +29,10 @@ fs.readFile(inputFile, 'utf8', (err, data) => {
         return
     }
     let fm = yamlFront.loadFront(data)
-    
+
+    // Include package version in template data
+    fm.pplantVersion = version
+
     // Unfold midi repeats by default
     if(fm.midi && fm.midi_unfold_repeats == undefined) {
         fm.midi_unfold_repeats = true
