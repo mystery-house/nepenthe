@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "argparse": "^2.0.1",
     "handlebars": "^4.7.7",
     "yaml-front-matter": "^4.1.1"
   },
