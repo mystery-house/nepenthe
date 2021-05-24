@@ -1,0 +1,5 @@
+image: node:latest
+test_async:
+    script:
+    - yarn install
+    - jest
