@@ -24,6 +24,9 @@
     "test": "jest"
   },
   "jest": {
-    "coverageReporters": ["json", "html"]
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
   }
 }
