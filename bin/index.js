@@ -72,6 +72,12 @@ function main() {
 
     // console.dir(data)
 
+    // The "layout" key in the frontmatter should contain a list of dicts, where
+    // each dict takes the form of 
+    //      {partName: 
+    //          [staffType1, staffType2]
+    //      }
+
     // If no layout instructions were explicitly defined then create a simple
     // default with a staff for each part.
     if(data['layout'] == undefined) {
