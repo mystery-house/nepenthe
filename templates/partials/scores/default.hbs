@@ -4,20 +4,27 @@
     basic Lilypond \score{} block.
 ~--}}
 {{!-- TODO refactor with part/staff logic now that we'll always have at least one part --}}
+
 \score {
-    {{~#if transpose}}
+
+    {{#if transpose~}}
     \transpose {{{transpose}}}
     {{/if~}}
+
     <<
     {{!-- Data will always have a 'layout' array with at least one item --}}
     {{#each layout}}
         {{!-- Each 'layout' array object will have at least one key/value 
-              pair mapping a part to the type of staff that should be used
+              pair mapping a list of the type(s) of staff that should be used
               to render it --}}     
         {{#each this}}
-            {{!-- In this context `@key` = the part name, `this` = the staff type}}
-            {{!-- Use whichStave to determine which staff partial to use, and pass the part name to it --}}
-            {{> (whichStave this) partName=@key }}
+            {{!-- In this context `@key` = the part name, and `this` = the array of
+                  staff type(s) should be used to display the part --}}
+            {{#each this}}
+                {{!-- In this context `this` is an array element describing which 
+                      staff type should be added to the score for the parent part --}}
+                {{> (whichStave this) partName=@../key }}
+            {{/each}}
         {{/each}}
     {{/each}}
     >>
