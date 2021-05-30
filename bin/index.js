@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { ArgumentParser } = require('argparse')
 const yamlFront = require('yaml-front-matter');
-const { renderLilypond } = require('../lib/lilypond.js')
+const { prepareGrouping, prepareLayout, render } = require('../lib/nepenthe.js')
 const { exit } = require('process');
 const { version } = require('../package.json')
 const { homepage } = require('../package.json')
@@ -17,7 +17,7 @@ function parseInputFile(file) {
     let data = fs.readFileSync(file, 'utf-8')
     let fm = yamlFront.loadFront(data)
 
-    // Include package version and homepage in template data
+    // Include package.json version and homepage in template data
     fm.pplantVersion = version
     fm.homepage = homepage
 
@@ -56,6 +56,33 @@ function main() {
     // There is probably a cleverer/built-in way to do this, but it's a start:
 
     hbs.registerHelper('part', part(data))
+
+    hbs.registerHelper('whichGrouping', (grouping) => {
+        // TODO can this support further parameters (IE instrument name for pianostaff) ?
+        if(grouping == undefined) {
+            return ""
+        }
+
+        var retGrouping
+
+        switch(grouping.toLowerCase()) {
+            case 'pianostaff':
+                retGrouping = "PianoStaff"
+                break;
+            case 'choirstaff':
+                retGrouping = "ChoirStaff"
+                break;
+            case 'grandstaff':
+                retGrouping = "GrandStaff"  
+                break;
+            case 'staffgroup':
+            default:
+                retGrouping =  "StaffGroup"
+                break;                            
+        }            
+        return new hbs.SafeString(`\\new ${retGrouping}`)
+        
+    })
     hbs.registerHelper('whichStave', (stave) => {return `staves_${stave}`})
     let input = hbs.compile(data.__content)()
 
@@ -64,13 +91,12 @@ function main() {
     if(data['parts'] == undefined) {
         data['parts'] = {'part1': input}
         data['input'] = ''
-    // If there were some parts in the input, then pass along whatever's left
-    // in the processed input.
+
+    // If there were some parts in the input, then pass along whatever's left;
+    // it will be added after parts are formatted.
     } else {
         data['input'] = input
     }
-
-    // console.dir(data)
 
     // The "layout" key in the frontmatter should contain a list of dicts, where
     // each dict takes the form of 
@@ -80,20 +106,13 @@ function main() {
 
     // If no layout instructions were explicitly defined then create a simple
     // default with a staff for each part.
-    if(data['layout'] == undefined) {
-        data['layout'] = []
-        for (let [part, val] of Object.entries(data['parts'])) {
-            let layout = {}
-            layout[part] = ["default"]
-            data['layout'].push(layout)
-        }
-    }
+    prepareLayout(data);
 
     // Remove __content now that we're done with it.
     delete data['__content']
 
     // Now Render the internal templates
-    let outputData = renderLilypond(data)
+    let outputData = render(data)
     
     if(args.outputFile == '-') {
         process.stdout.write(outputData)
@@ -106,3 +125,5 @@ function main() {
 if(require.main === module) {
     main()
 }
+
+

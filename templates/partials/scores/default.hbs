@@ -1,16 +1,11 @@
-{{!--~ 
-    This is the default, simplest score template; it passes whatever is left
-    in the input file after processing the front-matter, and wraps it in a
-    basic Lilypond \score{} block.
-~--}}
-{{!-- TODO refactor with part/staff logic now that we'll always have at least one part --}}
-
+{{!-- This is the default template for engraving a score. --}}
 \score {
 
     {{#if transpose~}}
     \transpose {{{transpose}}}
     {{/if~}}
 
+    {{ whichGrouping grouping }}
     <<
     {{!-- Data will always have a 'layout' array with at least one item --}}
     {{#each layout}}
@@ -29,4 +24,6 @@
     {{/each}}
     >>
     \layout {}
+    {{!-- Display anything left from the input file after `part` tags were processed: --}}
+    {{{input}}}
 }
