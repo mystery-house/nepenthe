@@ -6,7 +6,7 @@ const { exit } = require('process');
 const { version } = require('../package.json')
 const { homepage } = require('../package.json')
 const hbs = require('handlebars')
-const { part } = require('../lib/handlebars.js')
+const { part, whichGrouping, whichStave } = require('../lib/handlebars.js')
 //const util = require('util')
 
 
@@ -52,38 +52,14 @@ function main() {
 
     // After processing YAML front-matter, the actual input is left in the __content
     // property of the `data` object. The next step is to preprocess __content on 
-    // its own to extract any parts that may have been explicitly declared.
-    // There is probably a cleverer/built-in way to do this, but it's a start:
-
+    // its own to extract any parts that may have been explicitly declared; this is
+    // done by passing `data` into the `part` helper, which adds a sort of preprocessor 
+    // function to extract the contents of any {{part}}..{{/part}} blocks in
+    // the `__content` of the input file into a 'parts' dict that is put back into
+    // the main `data` dict:
     hbs.registerHelper('part', part(data))
 
-    hbs.registerHelper('whichGrouping', (grouping) => {
-        // TODO can this support further parameters (IE instrument name for pianostaff) ?
-        if(grouping == undefined) {
-            return ""
-        }
-
-        var retGrouping
-
-        switch(grouping.toLowerCase()) {
-            case 'pianostaff':
-                retGrouping = "PianoStaff"
-                break;
-            case 'choirstaff':
-                retGrouping = "ChoirStaff"
-                break;
-            case 'grandstaff':
-                retGrouping = "GrandStaff"  
-                break;
-            case 'staffgroup':
-            default:
-                retGrouping =  "StaffGroup"
-                break;                            
-        }            
-        return new hbs.SafeString(`\\new ${retGrouping}`)
-        
-    })
-    hbs.registerHelper('whichStave', (stave) => {return `staves_${stave}`})
+    // Compile `__content` to extract `parts` data:
     let input = hbs.compile(data.__content)()
 
     // If no parts were explicitly defined then create a single default part
@@ -92,28 +68,26 @@ function main() {
         data['parts'] = {'part1': input}
         data['input'] = ''
 
-    // If there were some parts in the input, then pass along whatever's left;
-    // it will be added after parts are formatted.
+    // If there *were* some parts in the input, then pass along whatever's left
+    // to the `data` dict as `input`. It will be added after parts are rendered:
     } else {
         data['input'] = input
     }
 
-    // The "layout" key in the frontmatter should contain a list of dicts, where
-    // each dict takes the form of 
-    //      {partName: 
-    //          [staffType1, staffType2]
-    //      }
-
-    // If no layout instructions were explicitly defined then create a simple
-    // default with a staff for each part.
-    prepareLayout(data);
-
-    // Remove __content now that we're done with it.
+    // Everything we need is now in the `data` variable; drop `__content`:
     delete data['__content']
 
-    // Now Render the internal templates
+    // Add the `layout` property if needed:
+    prepareLayout(data);
+
+    // Register additional handlebars helpers:
+    hbs.registerHelper('whichGrouping', whichGrouping)
+    hbs.registerHelper('whichStave', whichStave)
+
+    // Render to Lilypond:
     let outputData = render(data)
     
+    // Write to STDOUT or file per arguments:
     if(args.outputFile == '-') {
         process.stdout.write(outputData)
     }
