@@ -13,5 +13,6 @@
     {{!-- Regular staves: Hide stringnumbering hints by default --}}
         \override StringNumber #'stencil = ##f           
         \override StringNumber #'transparent = ##t
-
+        {{!-- Conditionally adds clef if defined and if staff type is 'default': --}}
+        {{addClef this}}
 }
