@@ -1,5 +1,5 @@
 {
-  "name": "pitcher-plant",
+  "name": "nepenthe",
   "version": "0.0.1",
   "description": "LilyPond preprocessor",
   "main": "bin/index.js",
@@ -14,7 +14,7 @@
     "yaml-front-matter": "^4.1.1"
   },
   "bin": {
-    "pplant": "bin/index.js"
+    "nepenthe": "bin/index.js"
   },
   "devDependencies": {
     "eslint": "^7.27.0",
