@@ -1,4 +1,6 @@
 {{!-- This is the default template for engraving a score. --}}
+
+
 \score {
 
     {{#if transpose~}}
@@ -18,7 +20,7 @@
             {{#each this}}
                 {{!-- In this context `this` is an array element describing which 
                       staff type should be added to the score for the parent part --}}
-                {{> (whichStave this) partName=@../key }}
+                {{> (whichStave this) part=(lookup @root.parts @../key)}}
             {{/each}}
         {{/each}}
     {{/each}}

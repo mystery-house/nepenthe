@@ -1,8 +1,9 @@
-%-- Begin {{partName}}
+%-- Begin {{part.name}}-tab
 
-    \new TabStaff {
-        {{{lookup @root.parts partName }}}
+    \new TabStaff {{>staves__attributes part.options}}
+    {
+        {{{ part.content }}}
     }
 
-%-- End {{partName}}
+%-- End {{part.name}}-tab
 

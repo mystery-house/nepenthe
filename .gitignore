@@ -1,7 +1,13 @@
-node_modules/*
-.vscode
+**/node_modules/
+.vscode/
 ._*
 *~
 test.*
 coverage/*
 yarn-error.log
+test.ly
+test.lyp
+test.png
+test.pdf
+test.mid
+test.midi
