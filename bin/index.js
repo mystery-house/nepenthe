@@ -33,20 +33,31 @@ function main() {
     // Process the input file into a handlebars-friendly dict:
     let data = parseInputFile(inputFile)
 
-    // Render to Lilypond:
-    let outputData = render(data)
-    
-    // Write to STDOUT or file per arguments:
-    if(args.outputFile == '-') {
-        process.stdout.write(outputData)
-    }
-    else {
-        fs.writeFileSync(args.outputFile, outputData)
-    }
-    exit(0)
+    // For each item in the `data` object that starts with the string 
+    // 'layout', render to Lilypond:
+    Object.keys(data).filter(k => k.startsWith('layout')).forEach(l => {
+
+        let outputData = render(data, l)
+
+         // Write to STDOUT or file per arguments:
+        if(args.outputFile == '-') {
+            process.stdout.write(outputData)
+        }
+        else {
+            var fileName = args.outputFile
+            var extendedName = l.replace('layout', '')
+            // This will need to be smarter if rendering directly 
+            // to pdf/png/etc is added
+            if(extendedName != "") {
+                fileName = args.outputFile.replace('.ly', `${extendedName}.ly`)
+            }
+            fs.writeFileSync(fileName, outputData)
+        }
+    })   
 }
 
 // If index.js has been invoked directly, run the main() function:
 if(require.main === module) {
     main()
+    exit(0)
 }
