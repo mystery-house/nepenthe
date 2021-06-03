@@ -1,6 +1,6 @@
 %-- Begin {{part.name}}-tab
 
-    \new TabStaff {{>staves__attributes part.options}}
+    \new TabStaff {{>staves__attributes part.options staveInfo=staveType}}
     {
         {{{ part.content }}}
     }

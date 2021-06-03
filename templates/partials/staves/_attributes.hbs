@@ -1,13 +1,10 @@
 {{!-- This partial handles the formatting of any attributes defined for a part. --}}
 \with {
-    {{#if this.instrumentName}}
-        instrumentName = #"{{ this.instrumentName }}"
-    {{/if}}
-    {{#if this.shortInstrumentName}}
-        shortInstrumentName = #"{{ this.shortInstrumentName }}"
-    {{/if}}
-    {{#if this.tuning}}
-        stringTunings = #{{{stringTuning this.instrumentName this.tuning }}}
+    
+    {{instrumentName this staveInfo=staveInfo}}
+    
+    {{#if (isTabStave staveInfo) }}
+        stringTunings = #{{stringTuning staveInfo }} {{!-- TODO only if stave Type is 'tab'--}}
     {{/if}}
     {{!-- TODO support customTuning attribute for part helper--}}
     {{!-- Regular staves: Hide stringnumbering hints by default --}}

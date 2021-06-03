@@ -1,6 +1,4 @@
 {{!-- This is the default template for engraving a score. --}}
-
-
 \score {
 
     {{#if transpose~}}
@@ -9,17 +7,15 @@
 
     {{ whichGrouping grouping }}
     <<
-    {{!-- Data will always have a 'layout' array with at least one item --}}
-    {{#each layout}}
-        {{!-- Each 'layout' array object will have at least one key/value
-              pair mapping a list of the type(s) of staff that should be used
-              to render it --}}
+    {{!-- The 'renderLayout' array contains at least one object mapping
+        a list of the type(s) of staff that should be used to render it: --}}
+    {{#each renderLayout}}
+        {{!-- In this context `@key` = the part name, and `this` = the array of
+            staff type(s) should be used to display the part: --}}
         {{#each this}}
-            {{!-- In this context `@key` = the part name, and `this` = the array of
-                  staff type(s) should be used to display the part --}}
+            {{!-- In this context `this` is a string describing which
+                staff type should be added to the score for the parent part: --}}
             {{#each this}}
-                {{!-- In this context `this` is an array element describing which
-                      staff type should be added to the score for the parent part --}}
                 {{> (whichStave this) part=(lookup @root.parts @../key) staveType=this }}
             {{/each}}
         {{/each}}
