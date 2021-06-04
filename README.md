@@ -4,9 +4,59 @@ Nepenthe (*nuh·pen·thee*) is a preprocessor for [Lilypond](http://lilypond.org
 
 Nepenthe documents are a hybrid of [YAML](https://yaml.org/) and Lilypond, with a little bit of [Handlebars](https://handlebarsjs.com/) thrown in, although you don't need to know Handlebars to use Nepenthe.
 
+## Example
+
+This Nepenthe document:
+
+    ---
+    version: 2.20.0
+    title: A Simple Nepenthe Score
+    composer: Johann Gambolputty
+    ---
+    \relative { c'4 e e8 g c4 | g2 c2  }
+
+...becomes this Lilypond document:
+
+    \version "2.20.0"
+
+    % Preprocessed by Nepenthe v0.0.1
+    % <https://tinpan-io.github.io/nepenthe/>
+
+    \header {
+    title = "A Simple Nepenthe Score"
+    composer = "Johann Gambolputty"
+    tagline = \markup {\with-url #"https://tinpan-io.github.io/nepenthe/" "Pre-processed with Nepenthe"}
+    }
+    %#############################################################################%
+    \score {
+
+
+        <<
+                    %-- Begin part1-staff
+                        \new Staff \with {
+                        
+                        
+                        
+                            \override StringNumber #'stencil = ##f           
+                            \override StringNumber #'transparent = ##t
+                            \clef "treble"
+                    }
+                    
+                        {        
+                            
+                    \relative { c'4 e e8 g c4 | g2 c2  }
+                    
+                        }
+                    
+                    %-- End part1-staff
+                    
+        >>
+        \layout {}
+        
+    }
 ## Who is this For?
 
-If you prefer Lilypond's What-You-See-Is-What-You-Meant approach for musical notation to using a GUI tool like MuseScore, but constantly find yourself looking up where certain instructions go and/or or find yourself jumping through hoops to take the same sections of notation and output them in different formats (Notation only / Tab only / Notation + Tab, etc.) then you may like Nepenthe.
+If you're fairly comfortable with Lilypond and prefer its What-You-See-Is-What-You-Meant approach for musical notation to using a GUI tool like MuseScore, but constantly find yourself looking up where certain instructions go and/or or find yourself jumping through hoops to take the same sections of notation and output them in different formats (Notation only / Tab only / Notation + Tab, etc.) then you may like Nepenthe.
 
 ## Installation
 
