@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** 
+/**
  * @file The main entrypoint for the `nepenthe` command.
  */
 const fs = require('fs');
@@ -21,21 +21,21 @@ function main() {
     parser.add_argument({dest: 'inputFile', help: 'the path to the file to be processed (use `-` to read from STDIN.)'})
     parser.add_argument({dest: 'outputFile', help: 'the path to the output file (use `-` to send to STDOUT.)'})
     let args = parser.parse_args()
-    
+
     let inputFile = args.inputFile
     if(inputFile == '-') {
         inputFile = process.stdin.fd
     }
-    
+
     if(args.inputFile != '-' && !fs.existsSync(inputFile)) {
         process.stderr.write(`\nNo such file \`${inputFile}\`\n\n`)
         exit(1)
     }
-    
+
     // Process the input file into a handlebars-friendly dict:
     let data = parseInputFile(inputFile)
 
-    // For each item in the `data` object that starts with the string 
+    // For each item in the `data` object that starts with the string
     // 'layout', render to Lilypond:
     Object.keys(data).filter(k => k.startsWith('layout')).forEach(l => {
 
@@ -48,14 +48,14 @@ function main() {
         else {
             var fileName = args.outputFile
             var extendedName = l.replace('layout', '')
-            // This will need to be smarter if rendering directly 
+            // This will need to be smarter if rendering directly
             // to pdf/png/etc is added
             if(extendedName != "") {
                 fileName = args.outputFile.replace('.ly', `${extendedName}.ly`)
             }
             fs.writeFileSync(fileName, outputData)
         }
-    })   
+    })
 }
 
 // If index.js has been invoked directly, run the main() function:
