@@ -1,10 +1,10 @@
 {
   "name": "nepenthe",
   "version": "0.0.1",
-  "description": "LilyPond preprocessor",
+  "description": "Lilypond preprocessor",
   "main": "bin/index.js",
-  "homepage": "https://gitlab.com/tinpan-io/pitcher-plant",
-  "repository": "git@gitlab.com:tinpan-io/pitcher-plant.git",
+  "homepage": "https://github.com/tinpan-io/nepenthe",
+  "repository": "git@github.com:tinpan-io/nepenthe.git",
   "author": "Andy Chase <andychase@gmail.com>",
   "license": "MIT",
   "private": true,
