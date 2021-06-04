@@ -1,0 +1,42 @@
+---
+version: 2.18.2
+grouping: staffGroup
+layout-notation:
+    - chords: ['chordnames']
+    - partA:
+      - default
+    - partB:
+      - default
+layout-part-a-tab:
+    - chords: ['chordnames']
+    - partA:
+      - default
+      - tab-banjo-c
+layout-part-b-tab:
+    - chords: ['chordnames']
+    - partB:
+      - default
+      - tab-banjo-c
+---
+{{#part 'chords'}}
+
+  \chordmode  { c1 }
+
+{{/part}}
+
+{{#part 'partA' instrumentName='1st Banjo' clef="treble_8"}}
+ {
+    \key c \major
+    \repeat volta 2 {
+      c4 e' g'\5 e'
+    }
+  }
+{{/part}}
+
+{{#part 'partB' instrumentName='2nd Banjo' clef="treble_8"}}
+  {
+    \repeat volta 2 {
+      c'2 g'
+    }
+  }
+{{/part}}
