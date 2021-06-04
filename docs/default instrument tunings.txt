@@ -1,0 +1,41 @@
+(As defined in https://github.com/aspiers/lilypond/blob/master/ly/string-tunings-init.ly)
+
+%% guitar tunings
+guitar-tuning
+seven-string
+drop-d
+drop-c
+open-g
+open-d
+dadgad
+lute
+asus4
+
+%% bass tunings
+bass-tuning
+four-string
+drop-d
+five-string
+six-string
+
+%% mandolin tunings
+mandolin-tuning
+
+%% tunings for 5-string banjo
+open-g
+c
+modal
+open-d
+open-dm
+
+%% ukulele tunings
+ukulele-tuning
+d
+ukulele
+ukulele
+
+%% orchestral strings
+violin-tuning
+viola-tuning
+cello-tuning
+bass
