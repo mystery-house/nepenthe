@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-
+/** 
+ * @file The main entrypoint for the `nepenthe` command.
+ */
 const fs = require('fs');
 const { ArgumentParser } = require('argparse')
 const { parseInputFile, render } = require('../lib/nepenthe.js')
@@ -10,7 +12,7 @@ module.exports = {main}
 
 
 /**
- * The main callback for the `nepenthe` command.
+ * The main function for the `nepenthe` command.
  */
 function main() {
     let parser = new ArgumentParser({
