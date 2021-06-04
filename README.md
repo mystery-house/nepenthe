@@ -82,3 +82,7 @@ To confirm that Nepenthe has been installed, type:
     nepenthe -h
 
 Nepenthe should display a help message.
+
+## Source Code/Bug Reports
+
+Visit the [Nepenthe Github project page](https://github.com/tinpan-io/nepenthe) to access source code or submit issues.

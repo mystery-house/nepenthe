@@ -1,0 +1,6 @@
+---
+version: 2.20.0
+title: A Simple Nepenthe Score
+composer: Johann Gambolputty
+---
+\relative { c'4 e e8 g c4 | g2 c2  }
