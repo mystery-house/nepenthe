@@ -1,6 +1,6 @@
 # Nepenthe - A Lilypond Preprocessor
 
-Nepenthe is a preprocessor for [Lilypond](http://lilypond.org/) music 
+Nepenthe (*nuh·pen·thee*) is a preprocessor for [Lilypond](http://lilypond.org/) music 
 notation which uses its own document format to sidestep some of the 
 tricker and/or harder-to-remember aspects of arranging and formatting 
 music in Lilypond. You know, the stuff you always have to look up

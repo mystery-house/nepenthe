@@ -3,11 +3,24 @@
   "version": "0.0.1",
   "description": "Lilypond preprocessor",
   "main": "bin/index.js",
-  "homepage": "https://github.com/tinpan-io/nepenthe",
-  "repository": "git@github.com:tinpan-io/nepenthe.git",
+  "homepage": "https://github.com/tinpan-io/nepenthe#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinpan-io/nepenthe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tinpan-io/nepenthe/issues"
+  },
   "author": "Andy Chase <andychase@gmail.com>",
   "license": "MIT",
-  "private": true,
+  "keywords": [
+    "Lilypond",
+    "music",
+    "notation",
+    "tablature",
+    "sheet",
+    "music"
+  ],
   "dependencies": {
     "argparse": "^2.0.1",
     "handlebars": "^4.7.7",
