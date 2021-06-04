@@ -16,7 +16,7 @@ module.exports = {main}
  */
 function main() {
     let parser = new ArgumentParser({
-        description: 'PitcherPlant - Lilypond pre-processor'
+        description: 'Nepenthe - Lilypond preprocessor'
     });
     parser.add_argument({dest: 'inputFile', help: 'the path to the file to be processed (use `-` to read from STDIN.)'})
     parser.add_argument({dest: 'outputFile', help: 'the path to the output file (use `-` to send to STDOUT.)'})
