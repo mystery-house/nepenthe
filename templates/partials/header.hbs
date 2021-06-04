@@ -1,0 +1,45 @@
+\version "{{version}}"
+
+% Preprocessed by Pitcher Plant v{{pplantVersion}}
+% <{{homepage}}>
+{{#if midi_file_ext}}
+#(ly:set-option 'midi-extension "{{{midi_file_ext}}}")
+{{/if}}
+
+\header {
+{{#if dedication }}
+  dedication = "{{dedication}}"
+{{/if ~}}
+{{~#if title }}
+  title = "{{title}}"
+{{/if ~}}
+{{~#if subtitle }}
+  subtitle = "{{subtitle}}"
+{{/if ~}}
+{{~#if subsubtitle }}
+  subsubtitle = "{{subsubtitle}}"
+{{/if ~}}
+{{~#if instrument }}
+  instrument = "{{instrument}}"
+{{/if ~}}
+{{~#if poet}}
+  poet = "{{poet}}"
+{{/if}}
+{{~#if composer}}
+  composer = "{{composer}}"
+{{/if ~}}
+{{~#if meter}}
+  meter = "{{meter}}"
+{{/if ~}}
+{{~#if arranger}}
+  arranger = "{{arranger}}"
+{{/if ~}}
+{{~#if tagline}}
+  tagline = "{{tagline}}"
+{{~else}}
+  tagline = \markup {\with-url #"{{homepage}}" "Pre-processed with PitcherPlant"}
+{{/if ~}}
+{{~#if copyright}}
+  copyright = "{{copyright}}"
+{{/if ~}}
+}

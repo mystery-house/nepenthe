@@ -1,0 +1,27 @@
+{{!-- This is the default template for engraving a score. --}}
+\score {
+
+    {{#if transpose~}}
+    \transpose {{{transpose}}}
+    {{/if~}}
+
+    {{ whichGrouping grouping }}
+    <<
+    {{!-- The 'renderLayout' array contains at least one object mapping
+        a list of the type(s) of staff that should be used to render it: --}}
+    {{#each renderLayout}}
+        {{!-- In this context `@key` = the part name, and `this` = the array of
+            staff type(s) should be used to display the part: --}}
+        {{#each this}}
+            {{!-- In this context `this` is a string describing which
+                staff type should be added to the score for the parent part: --}}
+            {{#each this}}
+                {{> (whichStave this) part=(lookup @root.parts @../key) staveType=this }}
+            {{/each}}
+        {{/each}}
+    {{/each}}
+    >>
+    \layout {}
+    {{!-- Display anything left from the input file after `part` tags were processed: --}}
+    {{{input}}}
+}

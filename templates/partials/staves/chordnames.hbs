@@ -1,0 +1,10 @@
+%-- Begin {{part.name}}-chordnames
+
+    \new ChordNames {{>staves__attributes part.options}}
+    {
+        {{!-- Only display chord names when they change: ~--}}
+        \set chordChanges = ##t  
+        {{{ part.content }}}
+    }
+
+%-- End {{part.name}}-chordnames
