@@ -1,7 +1,5 @@
-# PitcherPlant
+# Nepenthe - A Lilypond Preprocessor
 
-PitcherPlant is a pre-processor for [Lilypond](http://lilypond.org/) music 
-notation. It handles a number of common elements of Lilypond notation (the 
-ones you use all the time but usually end up copy/pasting from an older 
-document because you can never quite remember the syntax) as basic 
-[YAML](https://yaml.org/) data, letting you concentrate on the music itself.
+Nepenthe (*nuh·pen·thee*) is a preprocessor for [Lilypond](http://lilypond.org/) music notation which uses its own document format to sidestep some of the tricker and/or harder-to-remember aspects of arranging and formatting music in Lilypond. You know, the stuff you have to look up every time.
+
+Nepenthe documents are a hybrid of [YAML](https://yaml.org/) and Lilypond, with a little bit of [Handlebars](https://handlebarsjs.com/) thrown in, although you don't need to know Handlebars to use Nepenthe.
