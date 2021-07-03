@@ -28,24 +28,25 @@ const staffTypeMap:StringDict = {
 
 // TODO TypeScript interfaces for part/layout/staff structures and use them as applicable for helper inputs etc.
 
-export function staffTypeHelper(this: any):any  {
-    var staffType = this.type === undefined ? 'staff': this.type.toLowerCase()
-    return staffTypeMap[staffType]
+export function partHelper(options: any) {
+    // return new hbs.SafeString(`${options.hash.name} = {\n\t${options.fn(context)}\n}`)
+    var partPartial = hbs.partials['partPartial']
+    partPartial = hbs.compile(partPartial)
+    var context = Object.assign({}, options.hash, {'partContent': options.fn})
+    return  new hbs.SafeString(partPartial(context))
 }
 
-
-export function partHelper(this: any, options: any) {
-    return new hbs.SafeString(`${options.hash.name} = {\n\t${options.fn(this)}\n}`)
-}
-
-export function layoutHelper(this: any, options: any) {
+export function layoutHelper(options: any) {
+    var context = Object.assign({}, options.hash, {'layoutContent': options.fn})
     var layoutPartial = hbs.partials['layoutPartial']
     layoutPartial = hbs.compile(layoutPartial)
-    return layoutPartial(options.fn(this))
+    return new hbs.SafeString(layoutPartial(context))
 }
 
-export function staffHelper(this: any, options: any) {    
+export function staffHelper(options: any) {
+    var staffType = options.hash.type === undefined ? 'staff' : options.hash.type
+    var context = {'staffType': staffTypeMap[staffType.toLowerCase()], 'staffPart': options.hash.part}
     var staffPartial = hbs.partials['staffPartial']
     staffPartial = hbs.compile(staffPartial)
-    return staffPartial(options.hash)
+    return new hbs.SafeString(staffPartial(context))
 }
