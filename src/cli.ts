@@ -6,7 +6,7 @@ import { parseInput } from "./nepenthe";
 import { exit } from 'process';
 import { readFileSync } from "fs";
 const yamlFront = require('yaml-front-matter');
-import {partHelper, layoutHelper, staffHelper } from "./handlebars"
+import {partHelper, scoreHelper, staffHelper } from "./handlebars"
 import { hasSubscribers } from 'diagnostic_channel';
 import hbs from "handlebars";
 
@@ -19,11 +19,11 @@ function main() {
 
     let fileData = fs.readFileSync('test.nep', 'utf-8')
     hbs.registerHelper('part', partHelper)
-    hbs.registerHelper('layout', layoutHelper)
+    hbs.registerHelper('score', scoreHelper)
     hbs.registerHelper('staff', staffHelper)
 
     hbs.registerPartial('partPartial', fs.readFileSync('./src/templates/partials/part.hbs', 'utf-8'))
-    hbs.registerPartial('layoutPartial', fs.readFileSync('./src/templates/partials/layout.hbs', 'utf-8'))
+    hbs.registerPartial('scorePartial', fs.readFileSync('./src/templates/partials/score.hbs', 'utf-8'))
     hbs.registerPartial('staffPartial', fs.readFileSync('./src/templates/partials/staff.hbs', 'utf-8'))
 
 

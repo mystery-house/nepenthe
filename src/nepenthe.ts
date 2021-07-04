@@ -9,7 +9,7 @@ const fs = require('fs')
 const path = require('path')
 const yamlFront = require('yaml-front-matter');
 const { version, homepage } = require('../package.json')
-const { layout } = require('./handlebars')
+const { score } = require('./handlebars')
 
 //  const { part, 
 //      whichGrouping, 
@@ -37,7 +37,7 @@ export function parseInput(nepentheData: string): any {
     data.nepentheVersion = version
     data.homepage = homepage
 
-    hbs.registerHelper('layout', layout)
+    hbs.registerHelper('score', score)
     let tpl = hbs.compile(nepentheData)
 
     // // Unfold midi repeats by default
@@ -76,7 +76,7 @@ export function parseInput(nepentheData: string): any {
     // // Everything we need is now in the `data` variable; drop `__content`:
     // delete data['__content']
 
-    // // Add the `layout` property if needed:
+    // // Add the `score` property if needed:
     // prepareLayouts(data);   
 
     return data

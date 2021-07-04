@@ -26,7 +26,7 @@ const staffTypeMap:StringDict = {
     "drumstaff": "DrumStaff",    
 }
 
-// TODO TypeScript interfaces for part/layout/staff structures and use them as applicable for helper inputs etc.
+// TODO TypeScript interfaces for part/score/staff structures and use them as applicable for helper inputs etc.
 
 export function partHelper(options: any) {
     // return new hbs.SafeString(`${options.hash.name} = {\n\t${options.fn(context)}\n}`)
@@ -36,11 +36,11 @@ export function partHelper(options: any) {
     return  new hbs.SafeString(partPartial(context))
 }
 
-export function layoutHelper(options: any) {
-    var context = Object.assign({}, options.hash, {'layoutContent': options.fn})
-    var layoutPartial = hbs.partials['layoutPartial']
-    layoutPartial = hbs.compile(layoutPartial)
-    return new hbs.SafeString(layoutPartial(context))
+export function scoreHelper(options: any) {
+    var context = Object.assign({}, options.hash, {'scoreContent': options.fn})
+    var scorePartial = hbs.partials['scorePartial']
+    scorePartial = hbs.compile(scorePartial)
+    return new hbs.SafeString(scorePartial(context))
 }
 
 export function staffHelper(options: any) {
