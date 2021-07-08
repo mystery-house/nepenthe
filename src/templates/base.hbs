@@ -1,0 +1,46 @@
+{{! This is the base template used by Nepenthe }}
+{{! to construct Lilypond Documents.           }}
+\version "{{version}}"
+
+\header {
+    {{#if dedication}}
+        dedication = "{{dedication}}"
+    {{/if}}
+    {{#if title}}
+        title = "{{title}}"
+    {{/if}}
+    {{#if subtitle}}
+        subtitle = "{{subtitle}}"
+    {{/if}}
+    {{#if subsubtitle}}
+        subsubtitle = "{{subsubtitle}}"
+    {{/if}}
+    {{#if instrument}}
+        instrument = "{{instrument}}"
+    {{/if}}
+    {{#if poet}}
+        poet = "{{poet}}"
+    {{/if}}
+    {{#if composermeter}}
+        composermeter = "{{composermeter}}"
+    {{/if}}
+    {{#if arranger}}
+        arranger = "{{arranger}}"
+    {{/if}}
+    {{#if tagline}}
+        tagline = "{{tagline}}"
+    {{/if}}
+    {{#if copyright}}
+        copyright = "{{copyright}}"
+    {{/if}}
+}
+
+{{#each parts}}
+{{>partPartial this}}
+{{/each}}
+
+{{{ content }}}
+
+{{! TODO header block from YAML front-matter }}
+{{! TODO pass rendered __content in as 'content' context variable and display it here, IE: }}
+{{!-- {{ content }} --}}

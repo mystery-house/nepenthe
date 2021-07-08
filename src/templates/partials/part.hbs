@@ -1,3 +1,8 @@
-{{{ name }}}Part = {
-    {{{ partContent }}}
+{{{ this.name }}}Part = {
+    {{# if this.options.mode }}\\{{{ this.options.mode }}} { {{/if}}
+    {{# if this.options.relative }}\relative { {{/if}}
+    {{{ this.content }}}
+    {{# if this.options.relative}} } {{/if}}
+    {{# if this.options.mode }} }{{/if}}
 }
+{{!-- TODO figure out why a 'mode' value of 'chord' is apparently falsy --}}

@@ -9,7 +9,7 @@ const fs = require('fs')
 const path = require('path')
 const yamlFront = require('yaml-front-matter');
 const { version, homepage } = require('../package.json')
-const { score } = require('./handlebars')
+const { score, extractParts } = require('./handlebars')
 
 //  const { part, 
 //      whichGrouping, 
@@ -19,76 +19,61 @@ const { score } = require('./handlebars')
 //      isTabStave,
 //      instrumentName,
 //      findPartials } = require('./handlebars.js')
- 
 //  module.exports = {parseInputFile, prepareGrouping, prepareLayouts, render}
-module.exports = {parseInput, parseInputFile}
+// module.exports = {parseInput, parseInputFile}
+
 
 /**
  * Reads Nepenthe input and prepares it for rendering.
- *
- * @param {string} nepentheData - A string of Nepenthe data
- * @return {object} A Handlebars context object containing data parsed from the file.
+ * @param inputData 
+ * @returns 
  */
-export function parseInput(nepentheData: string): any {
-    // let fileData = fs.readFileSync(file, 'utf-8')
-    let data = yamlFront.loadFront(nepentheData)
+export function parseInput(inputData: string) {
+    // Create a `data` object by parsing the YAML front-matter.
+    // `data` will eventually be used as the main Handlebars
+    // context:
+    let data = yamlFront.loadFront(inputData)
 
-    // Include package.json version and homepage in template data
+    // Include package.json version and homepage in template data:
     data.nepentheVersion = version
     data.homepage = homepage
 
-    hbs.registerHelper('score', score)
-    let tpl = hbs.compile(nepentheData)
-
-    // // Unfold midi repeats by default
+    // Unfold midi repeats by default
     // if(data.midi && data.midi_unfold_repeats == undefined) {
     //     data.midi_unfold_repeats = true
     // }
 
-    // // After processing YAML front-matter, the actual input is left in the __content
-    // // property of the `data` object. The next step is to preprocess __content on 
-    // // its own to extract any parts that may have been explicitly declared; this is
-    // // done by passing `data` into the `part` helper, which adds a sort of preprocessor 
-    // // function to extract the contents of any {{part}}..{{/part}} blocks in
-    // // the `__content` of the input file into a 'parts' dict that is put back into
-    // // the main `data` dict:
-    // hbs.registerHelper('part', part(data))
+    // After processing YAML front-matter, the actual input is left in the __content
+    // property of the `data` object. The next step is to preprocess __content on 
+    // its own to extract any parts that may have been explicitly declared; this is
+    // done by passing `data` into the `part` helper, which extracts the contents of 
+    // any {{part}}..{{/part}} blocks in the `__content` of the input file into a 
+    // 'parts' dict that is put back into the main `data` dict:
+    hbs.registerHelper('part', extractParts(data))
 
-    // // Compile `__content` to extract `parts` data:
-    // let input = hbs.compile(data.__content)()
+    // Compile `__content`. This will add the `parts` key to the `data` object,
+    hbs.compile(data.__content)()
 
-    // // If no parts were explicitly defined then create a single default part
-    // // using the entire input
-    // if(data['parts'] == undefined) {
-    //     data['parts'] = {'part1': {
-    //         'name': 'part1',
-    //         'content': input,
-    //         'options': {'clef': 'treble'}
-    //     }}
-    //     data['input'] = ''
+    // The part helper is only used during this first pass; unregister it
+    hbs.unregisterHelper('part') 
 
-    // // If there *were* some parts in the input, then pass along whatever's left
-    // // to the `data` dict as `input`. It will be added after parts are rendered:
-    // } else {
-    //     data['input'] = input
-    // }
+    // Return `__content` in the template context for further processing
+    data['input'] = data.__content
 
-    // // Everything we need is now in the `data` variable; drop `__content`:
-    // delete data['__content']
-
-    // // Add the `score` property if needed:
-    // prepareLayouts(data);   
+    // Everything we need is now in the `data` variable; drop `__content`:
+    delete data['__content']
 
     return data
 }
 
+
 /**
- * Reads Nepenthe input from a file or STDIN and prepares it for rendering.
- * 
- * @param {string} file - The filename to be parsed, or `-` to read fron `STDIN`
- * @return {object} A Handlebars context object containing data parsed from the file.
+ * Wrapper for the `parseInputFile` function which takes handles loading
+ * Nepenthe data from a given filename.
+ * @param fileName 
+ * @returns 
  */
-function parseInputFile(filename: string): object {
-    let nepentheData = fs.readFileSync(filename, 'utf-8')
-    return parseInput(nepentheData)
+export function parseInputFile(fileName: string) {
+    let fileData = fs.readFileSync(fileName, 'utf-8')
+    return parseInput(fileData)
 }
