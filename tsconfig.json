@@ -11,6 +11,8 @@
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
+    "noImplicitThis": false,
+    "sourceMap": true
   },
   "exclude": [
     "lib",
