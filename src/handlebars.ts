@@ -3,9 +3,7 @@
  */
 
 import hbs from 'handlebars';
-import fs from 'fs';
-import path from 'path';
-import { privateEncrypt } from 'crypto';
+import { UnrecognizedModeError } from './errors'
 
 /**
  * Describes a simple dictionary-like object whose keys and values are
@@ -79,15 +77,23 @@ export function extractParts(context: any) {
     return inner
 }
 
-// export function partHelper(options: any) {
-//     if('mode' in options.hash) {
-//         options.hash.mode = modeMap[options.hash.mode]
-//     }
-//     var partPartial = hbs.partials['partPartial']
-//     partPartial = hbs.compile(partPartial, {compat: true})
-//     var context = Object.assign({}, options.hash, {'partContent': options.fn})
-//     return  new hbs.SafeString(partPartial(context))
-// }
+
+/**
+ * Handlebars helper function that takes the `mode` attribute from a Nepenthe
+ * `part` tag and maps it to the appropriate LilyPond equivalent. If no 
+ * matching value is found, throws an `UnrecognizedModeError`.
+ * @param part
+ * @returns 
+ */
+export function modeHelper(part: any) {
+    if(part.mode in modeMap) {
+        return modeMap[part.mode]
+    }
+    else {
+        throw new UnrecognizedModeError(`Unrecognized mode in part "${part.name}": ${part.mode}`)
+    }
+}
+
 
 export function scoreHelper(options: any) {
     var context = Object.assign({}, options.hash, {'scoreContent': options.fn})

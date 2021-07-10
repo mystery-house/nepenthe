@@ -6,7 +6,7 @@ import { parseInputFile } from "./nepenthe";
 import { exit } from 'process';
 import { readFileSync } from "fs";
 const yamlFront = require('yaml-front-matter');
-import {extractParts, scoreHelper, staffHelper } from "./handlebars"
+import {modeHelper, scoreHelper, staffHelper } from "./handlebars"
 import { hasSubscribers } from 'diagnostic_channel';
 import hbs from "handlebars";
 
@@ -19,7 +19,7 @@ function main() {
 
     let data = parseInputFile('test.nep')  // TODO parse input args
     // let input = hbs.compile(data['input'])
-
+    hbs.registerHelper('mode', modeHelper)
     hbs.registerHelper('score', scoreHelper)
     hbs.registerHelper('staff', staffHelper)
 
