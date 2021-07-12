@@ -1,5 +1,9 @@
 {{!-- This tag is used by the Nepenthe `staff` tag to format staves as Lilypond. --}}
 
-        \new {{{ staffType }}} {
+        \new {{{ staffType }}} \with {
+            {{#if instrumentName}}instrumentName = #"{{{instrumentName}}}"{{/if}}
+            {{#if shortInstrumentName}}shortInstrumentName = #"{{{shortInstrumentName}}}"{{/if}}
+        } {
+            {{#if clef}}\clef "{{{clef}}}"{{/if}}
             \\{{{ staffPart }}}Part
         }

@@ -18,6 +18,7 @@
   */
  const staffTypeMap:StringDict = {
      "staff": "Staff",
+     "tab": "TabStaff",
      "tabstaff": "TabStaff",
      "chordnames": "ChordNames",
      "lyrics": "Lyrics",
@@ -79,15 +80,15 @@
       */
      var inner = function partHelper (options: any) {
          if(context['parts'] == undefined) {
-             context['parts'] = []
+             context['parts'] = {}
          }
          if(options !== undefined) {
              var content = options.fn(this)
-             context['parts'].push({
+             context['parts'][options.hash.name] = {
                  "name": options.hash.name,
                  "content": new hbs.SafeString(content),
                  "options": options.hash
-             })
+             }
          }
      };
      return inner
@@ -174,12 +175,20 @@
      return new hbs.SafeString(banjo5thStrPartial(context)) 
  }
  
- 
+
  export function staffHelper(options: any) {
+     var part = options.hash.part
      var staffType = options.hash.type === undefined ? 'staff' : options.hash.type
+     // TODO
+     //  1. Default clef to 'tab' for TabStaff even if `clef` has been set for part
+     //  2. ...but, allow 'clef' to also be set as a `staff` tag attribute, in which case that value always takes precedence
+     var clef = staffType.toLowerCase() == 'tab' ? 'tab' : options.data.root.parts[part].options.clef
      var context = {
          'staffType': staffTypeMap[staffType.toLowerCase()], 
-         'staffPart': options.hash.part
+         'staffPart': part,
+         'clef': clef,
+         'instrumentName': options.data.root.parts[part].options.instrumentName,
+         'shortInstrumentName': options.data.root.parts[part].options.shortInstrumentName,
      }
      var staffPartial = hbs.partials['staffPartial']
      staffPartial = hbs.compile(staffPartial)
