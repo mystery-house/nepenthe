@@ -1,6 +1,7 @@
 {{{ this.name }}}Part = {
+{{ global }}
     {{# if this.options.mode }}\\{{{ mode this.options }}} { {{/if}}
-    {{# if this.options.relative }}\relative { {{/if}}
+    {{# if this.options.relative }}\relative {{{ this.options.relative }}}{ {{/if}}
     {{{ this.content }}}
     {{# if this.options.relative}} } {{/if}}
     {{# if this.options.mode }} }{{/if}}

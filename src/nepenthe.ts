@@ -6,10 +6,9 @@
 
 var hbs = require("handlebars")
 const fs = require('fs')
-const path = require('path')
 const yamlFront = require('yaml-front-matter');
 const { version, homepage } = require('../package.json')
-const { score, extractParts } = require('./handlebars')
+const { extractGlobal, extractParts, banjo5thStrHelper} = require('./handlebars')
 
 //  const { part, 
 //      whichGrouping, 
@@ -49,13 +48,18 @@ export function parseInput(inputData: string) {
     // done by passing `data` into the `part` helper, which extracts the contents of 
     // any {{part}}..{{/part}} blocks in the `__content` of the input file into a 
     // 'parts' dict that is put back into the main `data` dict:
+    hbs.registerHelper('global', extractGlobal(data))
     hbs.registerHelper('part', extractParts(data))
+    hbs.registerHelper('banjo5thStr', banjo5thStrHelper)
+    hbs.registerPartial('banjo5thStrPartial', fs.readFileSync('./src/templates/partials/banjo5thStr.hbs', 'utf-8'))
 
     // Compile `__content`. This will add the `parts` key to the `data` object,
     hbs.compile(data.__content)()
 
-    // The part helper is only used during this first pass; unregister it
+    // The global and part block helpers are only used during this first pass; unregister them
+    hbs.unregisterHelper('global') 
     hbs.unregisterHelper('part') 
+    hbs.unregisterHelper('banjo5thStr')
 
     // Return `__content` in the template context for further processing
     data['input'] = data.__content
