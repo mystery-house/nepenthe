@@ -1,5 +1,6 @@
 /**
  * @file Provides Handlebars helper functions used to process Nepenthe documents into Lilypond documents.
+ * @author Andy Chase
  */
 
 import hbs from 'handlebars';
@@ -59,7 +60,6 @@ export function extractParts(context: any) {
     /**
      * Auto-generated Handlebars helper function that extracts any
      * `#part` block tags into the provided context object.
-     *
      */
     var inner = function partHelper (options: any) {
         if(context['parts'] == undefined) {
@@ -94,7 +94,12 @@ export function modeHelper(part: any) {
     }
 }
 
-
+/**
+ * Handlebars helper function that renders the `score` tag.
+ * 
+ * @param options
+ * @returns 
+ */
 export function scoreHelper(options: any) {
     var context = Object.assign({}, options.hash, {'scoreContent': options.fn})
     var scorePartial = hbs.partials['scorePartial']
@@ -102,6 +107,18 @@ export function scoreHelper(options: any) {
     return new hbs.SafeString(scorePartial(context))
 }
 
+
+/**
+ * Handlebars helper function that renders the `staff` tag.
+ * 
+ * Accepts two options: 
+ * 
+ *   - "type" (The type of staff to be rendered)
+ *   - "part" (The part to be displayed on this staff)
+ * 
+ * @param options
+ * @returns 
+ */
 export function staffHelper(options: any) {
     var staffType = options.hash.type === undefined ? 'staff' : options.hash.type
     var context = {'staffType': staffTypeMap[staffType.toLowerCase()], 'staffPart': options.hash.part}
