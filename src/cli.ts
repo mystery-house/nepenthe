@@ -17,7 +17,7 @@ module.exports = {main}
  */
 function main() {
 
-    let data = parseInputFile('test.nep')  // TODO parse input args
+    let data = parseInputFile('Herbert Ellis - Firefly Jig.nep')  // TODO parse input args
     // let input = hbs.compile(data['input'])
     hbs.registerHelper('mode', modeHelper)
     hbs.registerHelper('score', scoreHelper)
