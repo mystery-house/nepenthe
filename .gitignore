@@ -2,3 +2,5 @@
 .vscode/
 test.*
 **/lib/
+._*
+coverage/

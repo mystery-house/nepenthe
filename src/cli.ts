@@ -5,9 +5,13 @@ import path from "path";
 import { parseInputFile } from "./nepenthe";
 import { exit } from "process";
 import { readFileSync } from "fs";
-const yamlFront = require("yaml-front-matter");
-import { modeHelper, scoreHelper, staffHelper } from "./handlebars";
-import { hasSubscribers } from "diagnostic_channel";
+import {
+    modeHelper,
+    scoreHelper,
+    staffHelper,
+    globalHelper,
+    banjo5thStrHelper,
+} from "./handlebars";
 import hbs from "handlebars";
 
 module.exports = { main };
