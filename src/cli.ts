@@ -2,6 +2,7 @@
 
 import fs from "fs";
 import path from "path";
+import process, { mainModule } from "process";
 import { parseInputFile } from "./nepenthe";
 import { exit } from "process";
 import { readFileSync } from "fs";
@@ -14,16 +15,15 @@ import {
 } from "./handlebars";
 import hbs from "handlebars";
 
-module.exports = { main };
+import { Command } from "commander";
 
 /**
- * The main function for the `nepenthe` command.
+ * The default 'engrave' subcommand for nepenthe.
  */
-function main() {
-
-    // TODO: move actual processing into its own function in nepenthe.ts; 
+function engrave(nepentheDoc: string) {
+    // TODO: move actual processing into its own function in nepenthe.ts;
     // main() should primarily deal with:
-    
+
     // handle args:
     // Positional args:
     // input file ('-' for STDIN)
@@ -44,15 +44,14 @@ function main() {
     // - check for `lilypond` executable in $PATH.
     //      - If not set in nepenthe_config, add it
     //      - If not found and user has requested a graphic output format, throw an error
-    // - Determine output filename if format is specified but 
+    // - Determine output filename if format is specified but
 
     // POSTFLIGHT:
     // - If user has selected STDOUT, dump data and exit
     // - If output file is a path, write appropriate file and
     //     Display success/failure message as appropriate
 
-
-    let data = parseInputFile("Herbert Ellis - Firefly Jig.nep"); // TODO parse input args
+    let data = parseInputFile(nepentheDoc); // TODO parse input args
 
     hbs.registerHelper("mode", modeHelper);
     hbs.registerHelper("score", scoreHelper);
@@ -82,8 +81,30 @@ function main() {
     console.log(final);
 }
 
-// If index.js has been invoked directly, run the main() function:
+function main() {
+    const program = new Command();
+    program.version(String(process.env.npm_package_version));
+
+    // 'Engrave' is currently the only feature supported, but it's implemented
+    // as a subcommand to support possible future subcommands/pluggable architecture.
+    program
+        .command("engrave", { isDefault: true })
+        .alias("e")
+        .argument("<nepenthe-doc>", "The path to a Nepenthe document.  Use '-' to read from STDIN")
+        .description("(Default.) Engrave a nepenthe document.")
+        .action((nepentheDoc) => {
+            engrave(nepentheDoc);
+        });
+    program.parse(process.argv);
+
+    // TODO default help message if no args are present? Might help avoid
+    // confusion over 'nepenthe engrave' subcommand docs
+    // See https://stackoverflow.com/a/44419466
+}
+
+// If the cli module has been imported by the `nepenthe` bin, run the main() function:
 if (require.main === module) {
+
     main();
     exit(0);
 }

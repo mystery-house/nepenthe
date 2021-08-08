@@ -4,3 +4,5 @@ test.*
 **/lib/
 ._*
 coverage/
+src/.node_repl_history
+src/.bash_history
