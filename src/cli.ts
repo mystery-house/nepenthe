@@ -6,25 +6,10 @@ import { engrave } from "./commands";
 import { Command } from "commander";
 
 function main() {
-
-    // PREFLIGHT:
-    // - TODO check that output path exists and is writable
-    //      - throw error if not
-    // - TODO check for ~/.config/nepenthe/nepenthe_config.yml
-    //      - If directory/file does not exist, create it and add an annotated 'example_config' file
-    // - TODO check for `lilypond` executable in $PATH.
-    //      - If not set in nepenthe_config, add it
-    //      - If not found and user has requested a graphic output format, throw an error
-    // - TODO Determine output filename if format is specified but
-
-    // POSTFLIGHT:
-    // - TODO If user has selected STDOUT, dump data and exit
-    // - TODO If output file is a path, write appropriate file and
-    //     Display success/failure message as appropriate
     const program = new Command();
     program.version(String(process.env.npm_package_version));
 
-    // 'Engrave' is currently the only feature supported, but it's implemented
+    // 'Engrave' is currently the only feature implemented, but it's implemented
     // as a subcommand to support possible future subcommands/pluggable architecture.
     program
         .command("engrave")
@@ -40,8 +25,8 @@ function main() {
             "./"
         )
         .description("Engrave a nepenthe document.")
-        .action((nepentheDoc) => {
-            engrave(nepentheDoc);
+        .action((nepentheDoc, outputFormat, outputFile) => {
+            engrave(nepentheDoc, outputFormat, outputFile);
         });
     program.parse(process.argv);
 }

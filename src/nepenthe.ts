@@ -5,6 +5,8 @@
  */
 
 var hbs = require("handlebars");
+var dateFormat = require("dateformat");
+var path = require("path");
 const fs = require("fs");
 const yamlFront = require("yaml-front-matter");
 const { version, homepage } = require("../package.json");
@@ -20,6 +22,96 @@ const { extractGlobal, extractParts, banjo5thStrHelper } = require("./handlebars
 //      findPartials } = require('./handlebars.js')
 //  module.exports = {parseInputFile, prepareGrouping, prepareLayouts, render}
 // module.exports = {parseInput, parseInputFile}
+
+/**
+ * Valid values for the --output-format CLI option
+ */
+export enum OutputFormat {
+    Ly = "ly",
+    Pdf = "pdf",
+    Png = "png",
+    Svg = "svg",
+}
+
+/**
+ * Enum used as return values by the pathType() function
+ */
+export enum PathType {
+    FILE,
+    DIR,
+    STDIO,
+    INVALID,
+}
+
+/**
+ * Helper function for determining whether a given path is a
+ * file, directory, STDIO stream, or none of the above.
+ *
+ * @param pathName
+ * @returns
+ */
+export function pathType(pathName: string): PathType {
+    var result;
+    var stats = fs.statSync(pathName);
+    if (pathName == "-") {
+        result = PathType.STDIO;
+    }
+    try {
+        if (stats.isFile()) {
+            result = PathType.FILE;
+        } else if (stats.isDirectory()) {
+            result = PathType.DIR;
+        } else {
+            result = PathType.INVALID;
+        }
+    } catch (err) {
+        result = PathType.INVALID;
+    }
+    return result;
+}
+
+export function getOutputFilename(
+    inputPath: string,
+    outputPath: string,
+    format: OutputFormat
+): string {
+
+    var outputPathType = pathType(outputPath);
+    var finalOutputPath;
+    if (outputPathType == PathType.STDIO || outputPathType == PathType.FILE) {
+        finalOutputPath = outputPath;
+    } else if (outputPathType == PathType.DIR) {
+        var baseFilename;
+        var inputPathType = pathType(inputPath);
+        if (inputPathType == PathType.STDIO) {
+            baseFilename = dateFormat(new Date(), "yyyy-mm-dd_HH-MM");
+        } else if (inputPathType == PathType.FILE) {
+            baseFilename = path.basename(inputPath, path.extname(inputPath));
+        } else {
+            throw new Error(`Invalid input path: ${inputPath}`)
+        }
+        // TODO: trim path separator from output path before formatting string
+        finalOutputPath = `${outputPath}/${baseFilename}.${format}`;
+    } else {
+        console.log(outputPathType)
+        throw new Error(`Invalid output path: ${outputPath}`);
+    }
+    return finalOutputPath;
+}
+
+/**
+ * Tests whether a given path is writeable.
+ * @param pathName
+ * @returns
+ */
+export function isWriteable(pathName: string): boolean {
+    try {
+        fs.accessSync(pathName, fs.constants.W_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
 
 /**
  * Reads Nepenthe input and prepares it for rendering.

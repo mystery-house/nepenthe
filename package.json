@@ -11,6 +11,7 @@
   "private": false,
   "dependencies": {
     "commander": "^8.1.0",
+    "dateformat": "^4.5.1",
     "handlebars": "^4.7.7",
     "yaml-front-matter": "^4.1.1"
   },
