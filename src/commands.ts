@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import hbs from "handlebars";
 import { parseInputFile, OutputFormat } from "./nepenthe";
+var hasbin = require("hasbin");
 import {
     modeHelper,
     scoreHelper,
@@ -20,6 +21,18 @@ export function engrave(nepentheDoc: string, outputFormat: OutputFormat, outputF
     // - TODO check for `lilypond` executable in $PATH.
     //      - If not set in nepenthe_config, add it
     //      - If not found and user has requested a graphic output format, throw an error
+    var lilypond = hasbin.first.sync(['lilypondd'])
+    console.log(outputFormat)
+    if(lilypond === false) {
+        if(outputFormat == 'ly') {
+            console.warn("Could not find lilypond.")
+        }
+        else {
+            console.error(`Could not find lilypond; unable to generate '${outputFormat}' output. You may need to install lilypond or add its installation directory to your PATH.`)
+            process.exitCode = 1;
+        }
+    }
+
 
     // POSTFLIGHT:
     // - TODO If user has selected STDOUT, dump data and exit
@@ -52,7 +65,7 @@ export function engrave(nepentheDoc: string, outputFormat: OutputFormat, outputF
     // Compile and render the base template (passing the rendered Nepenthe doc
     // body from the previous step.)
     let base = hbs.compile(fs.readFileSync("./src/templates/base.hbs", "utf-8"));
-    let lilypond = base(data);
+    let lilypondData = base(data);
 
     // TODO if output format is lilypond: write to outputfile + return
 

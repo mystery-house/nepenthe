@@ -10,12 +10,15 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "commander": "^8.1.0",
+    "argparse": "^2.0.1",
     "dateformat": "^4.5.1",
     "handlebars": "^4.7.7",
+    "hasbin": "^1.2.3",
+    "lilynode": "^0.4.1",
     "yaml-front-matter": "^4.1.1"
   },
   "devDependencies": {
+    "@types/argparse": "^2.0.10",
     "@types/node": "^15.12.4",
     "jsdoc": "^3.6.7",
     "ts-node": "^10.0.0",

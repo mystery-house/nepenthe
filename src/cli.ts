@@ -3,32 +3,30 @@
 import process from "process";
 import { exit } from "process";
 import { engrave } from "./commands";
-import { Command } from "commander";
+import { OutputFormat } from "./nepenthe"
+import { ArgumentParser } from "argparse";
+import { version } from "../package.json";
+
 
 function main() {
-    const program = new Command();
-    program.version(String(process.env.npm_package_version));
 
-    // 'Engrave' is currently the only feature implemented, but it's implemented
-    // as a subcommand to support possible future subcommands/pluggable architecture.
-    program
-        .command("engrave")
-        .alias("e")
-        .argument(
-            "<input-document>",
-            "The path to a Nepenthe document.  (Use '-' to read from STDIN.)"
-        )
-        .option("-f, --output-format", "Output format. Options are 'pdf', 'png', 'svg', and 'ly'.", "pdf")
-        .option(
-            "-o, --output-file",
-            "The base name that should be used for the output file. The file extension will automatically be set by the `--format` option. Use '-' to send to STDOUT. If a output-file is a path, the output file name will be based on the input filename plus the output format. (If input is being read from STDIN, the output file will be named with a timestamp plus the output format.)",
-            "./"
-        )
-        .description("Engrave a nepenthe document.")
-        .action((nepentheDoc, outputFormat, outputFile) => {
-            engrave(nepentheDoc, outputFormat, outputFile);
-        });
-    program.parse(process.argv);
+    // TODO possible to implement subcommands with 'engrave' as the default
+    // in the node implementation of argparse?
+    // (without a ton of hacking? https://stackoverflow.com/a/26379693)
+    const parser = new ArgumentParser({
+        description: "Engrave a nepenthe document.",
+    });
+    
+    parser.add_argument("input-document", { nargs: 1, help: "A path to a Nepenthe document to be processed. (Use '-' for STDIN.)" })
+    parser.add_argument("-V", "--version", { action: "version", version });
+    parser.add_argument("-o", "--output-path", { help: "The base name that should be used for the output file, or the path where the output file should be written. The file extension will automatically be set according to the `--format` option. Use '-' to send to STDOUT. If a output-file is a path, the file name will be based on the input filename and the output format. (If input is being read from STDIN, the output file will be named with a timestamp plus the output format.)" });
+    // TODO constrain format to enum?
+    parser.add_argument("-f", "--format", { help: "The output format. Output format. Options are 'pdf', 'png', 'svg', and 'ly'.", default: "pdf"});
+    parser.add_argument("-y", "--overwrite", { help: "If set, existing output files will be automatically overwritten without warning.", action: "store_true"})
+
+    console.dir(parser.parse_args());
+
+
 }
 
 // If the cli module has been imported by the `nepenthe` bin, run the main() function:
