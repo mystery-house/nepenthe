@@ -5,8 +5,9 @@ import { exit } from "process";
 import { engrave } from "./commands";
 import { OutputFormat } from "./nepenthe"
 import { ArgumentParser } from "argparse";
-import { version } from "../package.json";
 
+// (Require package.json because TypeScript won't import from outside of `src`)
+const {version} = require("../package.json");
 
 function main() {
 
@@ -24,8 +25,7 @@ function main() {
     parser.add_argument("-f", "--format", { help: "The output format. Output format. Options are 'pdf', 'png', 'svg', and 'ly'.", default: "pdf"});
     parser.add_argument("-y", "--overwrite", { help: "If set, existing output files will be automatically overwritten without warning.", action: "store_true"})
 
-    console.dir(parser.parse_args());
-
+    engrave(parser.parse_args())
 
 }
 

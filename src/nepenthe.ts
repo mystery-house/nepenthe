@@ -27,10 +27,10 @@ const { extractGlobal, extractParts, banjo5thStrHelper } = require("./handlebars
  * Valid values for the --output-format CLI option
  */
 export enum OutputFormat {
-    Ly = "ly",
-    Pdf = "pdf",
-    Png = "png",
-    Svg = "svg",
+    LILYPOND = "ly",
+    PDF = "pdf",
+    PNG = "png",
+    SVG = "svg",
 }
 
 /**
@@ -90,8 +90,7 @@ export function getOutputFilename(
         } else {
             throw new Error(`Invalid input path: ${inputPath}`)
         }
-        // TODO: trim path separator from output path before formatting string
-        finalOutputPath = `${outputPath}/${baseFilename}.${format}`;
+        finalOutputPath = `${outputPath.replace(/\/$/, "")}/${baseFilename}.${format}`;
     } else {
         console.log(outputPathType)
         throw new Error(`Invalid output path: ${outputPath}`);
