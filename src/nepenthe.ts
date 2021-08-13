@@ -1,3 +1,4 @@
+
 /**
  * @file Contains functionality related to the actual processing of Nepenthe
  * documents.
@@ -28,9 +29,10 @@ const { extractGlobal, extractParts, banjo5thStrHelper } = require("./handlebars
  */
 export enum OutputFormat {
     LILYPOND = "ly",
-    PDF = "pdf",
-    PNG = "png",
-    SVG = "svg",
+    // TODO: Planned feature: support for invoking lilypond directly
+    // PDF = "pdf",
+    // PNG = "png",
+    // SVG = "svg",
 }
 
 /**
@@ -52,10 +54,13 @@ export enum PathType {
  */
 export function pathType(pathName: string): PathType {
     var result;
-    var stats = fs.statSync(pathName);
+
     if (pathName == "-") {
         result = PathType.STDIO;
+        return result;
     }
+    
+    var stats = fs.statSync(pathName);
     try {
         if (stats.isFile()) {
             result = PathType.FILE;
@@ -70,16 +75,23 @@ export function pathType(pathName: string): PathType {
     return result;
 }
 
-export function getOutputFilename(
+/**
+ * Helper function for deriving the base filename for the file(s) to be generated.
+ * @param inputPath
+ * @param output 
+ * @param format 
+ * @returns 
+ */
+export function getBaseOutputFilename(
     inputPath: string,
-    outputPath: string,
-    format: OutputFormat
+    output: string
 ): string {
 
-    var outputPathType = pathType(outputPath);
-    var finalOutputPath;
+    var outputPathType = pathType(output);
+    var finalBaseOutputPath;
+
     if (outputPathType == PathType.STDIO || outputPathType == PathType.FILE) {
-        finalOutputPath = outputPath;
+        finalBaseOutputPath = output;
     } else if (outputPathType == PathType.DIR) {
         var baseFilename;
         var inputPathType = pathType(inputPath);
@@ -90,12 +102,12 @@ export function getOutputFilename(
         } else {
             throw new Error(`Invalid input path: ${inputPath}`)
         }
-        finalOutputPath = `${outputPath.replace(/\/$/, "")}/${baseFilename}.${format}`;
+        finalBaseOutputPath = `${output.replace(/\/$/, "")}/${baseFilename}`;
     } else {
         console.log(outputPathType)
-        throw new Error(`Invalid output path: ${outputPath}`);
+        throw new Error(`Invalid output path: ${output}`);
     }
-    return finalOutputPath;
+    return finalBaseOutputPath;
 }
 
 /**

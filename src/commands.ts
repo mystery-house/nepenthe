@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import hbs from "handlebars";
-import { parseInputFile, OutputFormat } from "./nepenthe";
+
+import { parseInputFile, OutputFormat, getBaseOutputFilename } from "./nepenthe";
 var hasbin = require("hasbin");
 import {
     modeHelper,
@@ -13,7 +14,7 @@ import {
 
 interface EngraveArgs {
     'input-document':  string[],
-    output_path: string,
+    output: string,
     format: OutputFormat,
     overwrite: false
 }
@@ -49,9 +50,6 @@ export function engrave(args: EngraveArgs) {
         return;
     }
 
-
-
-
     let data = parseInputFile(args["input-document"][0]);
 
     hbs.registerHelper("mode", modeHelper);
@@ -80,13 +78,17 @@ export function engrave(args: EngraveArgs) {
     let base = hbs.compile(fs.readFileSync("./src/templates/base.hbs", "utf-8"));
     let lilypondData = base(data);
 
-    console.log(lilypondData)
-
-    // - TODO If user has selected STDOUT, dump data and exit
-    // - TODO If output file is a path, write appropriate file and
-    //     Display success/failure message as appropriate
-
-    // TODO if output format is lilypond: write to outputfile + return
-    // TODO else: execute lilypond with appropriate options + return
+    var baseOutputFilename = getBaseOutputFilename(args['input-document'][0], args.output)
+    console.log(baseOutputFilename)
+    // TODO handle overwrite flag (or lack thereof)
+    if(args.output == '-') {
+        console.log(lilypondData)
+    } else if(args.format == 'ly') {
+        fs.writeFileSync(`${baseOutputFilename}.ly`, lilypondData)
+    } else {
+        // TODO else: execute lilypond with appropriate options + return
+        console.info("Coming soon: hand-off to lilypond for pdf/png/svg")
+    }
+   
     return
 }
