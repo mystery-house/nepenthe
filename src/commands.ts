@@ -26,11 +26,10 @@ interface EngraveArgs {
 export function engrave(args: EngraveArgs) {
 
     // PREFLIGHT:
-    // TODO function to check for / initialize config file
-
-    // - TODO check for `lilypond` executable in $PATH.
-    //      - If not set in nepenthe_config, add it
-    //      - If not found and user has requested a graphic output format, throw an error
+    // TODO:
+    // - Function to check for / initialize config file
+    // - If lilypond binary is found but not in ~/.config/nepenthe/nepenthe_config.json, then add it
+    // - If lilypond binary is not found and user has requested a graphic output format, throw an error
     var lilypond = hasbin.first.sync(['lilypond'])
     if(lilypond === false) {
         if(args.format == OutputFormat.LILYPOND) {
@@ -52,6 +51,7 @@ export function engrave(args: EngraveArgs) {
 
     let data = parseInputFile(args["input-document"][0]);
 
+    // Compile and render the template data from the Nepenthe document
     hbs.registerHelper("mode", modeHelper);
     hbs.registerHelper("score", scoreHelper);
     hbs.registerHelper("staff", staffHelper);
@@ -69,7 +69,6 @@ export function engrave(args: EngraveArgs) {
         fs.readFileSync("./src/templates/partials/staff.hbs", "utf-8")
     );
 
-    // Compile and render the template data from the Nepenthe document
     let tpl = hbs.compile(data.input);
     data.content = tpl(data);
 
@@ -80,15 +79,31 @@ export function engrave(args: EngraveArgs) {
 
     var baseOutputFilename = getBaseOutputFilename(args['input-document'][0], args.output)
     console.log(baseOutputFilename)
-    // TODO handle overwrite flag (or lack thereof)
     if(args.output == '-') {
         console.log(lilypondData)
-    } else if(args.format == 'ly') {
-        fs.writeFileSync(`${baseOutputFilename}.ly`, lilypondData)
     } else {
-        // TODO else: execute lilypond with appropriate options + return
-        console.info("Coming soon: hand-off to lilypond for pdf/png/svg")
-    }
-   
+
+        // TODO:
+        // - Output file needs default value, which should be "{input file path}/{input file base name}.ly"
+        // - Don't overwrite existing file if it exists unless `-y` flag is present
+        // - If supplied output filename already ends in an extension, parse that to derive format and don't append another extension to it
+
+        let outputFileName = `${baseOutputFilename}.${args.format}`
+
+        if(fs.existsSync(outputFileName) && !args.overwrite) {
+            console.error(`File '${outputFileName}' already exists. (Use '-o' to specify a different output file name, or '-y' to overwrite)`)
+            process.exitCode = 1;
+            return
+        }
+
+        if(args.format == 'ly') {
+            fs.writeFileSync(outputFileName, lilypondData)
+        } else {
+            // TODO:
+            // - else: execute lilypond with appropriate options + return
+            console.info("Coming soon: hand-off to lilypond for pdf/png/svg")
+        }
+    } 
+
     return
 }

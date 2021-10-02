@@ -8,21 +8,11 @@
 var hbs = require("handlebars");
 var dateFormat = require("dateformat");
 var path = require("path");
-const fs = require("fs");
-const yamlFront = require("yaml-front-matter");
-const { version, homepage } = require("../package.json");
-const { extractGlobal, extractParts, banjo5thStrHelper } = require("./handlebars");
+import fs from "fs";
+import yamlFront from "yaml-front-matter";
+import { version as nepentheVersion, homepage as nepentheHomepage} from "../package.json";
+import { extractGlobal, extractParts, banjo5thStrHelper } from "./handlebars";
 
-//  const { part,
-//      whichGrouping,
-//      whichStave,
-//      stringTuning,
-//      addClef,
-//      isTabStave,
-//      instrumentName,
-//      findPartials } = require('./handlebars.js')
-//  module.exports = {parseInputFile, prepareGrouping, prepareLayouts, render}
-// module.exports = {parseInput, parseInputFile}
 
 /**
  * Valid values for the --output-format CLI option
@@ -75,6 +65,7 @@ export function pathType(pathName: string): PathType {
     return result;
 }
 
+
 /**
  * Helper function for deriving the base filename for the file(s) to be generated.
  * @param inputPath
@@ -124,6 +115,7 @@ export function isWriteable(pathName: string): boolean {
     }
 }
 
+
 /**
  * Reads Nepenthe input and prepares it for rendering.
  * @param inputData
@@ -133,11 +125,11 @@ export function parseInput(inputData: string) {
     // Create a `data` object by parsing the YAML front-matter.
     // `data` will eventually be used as the main Handlebars
     // context:
-    let data = yamlFront.loadFront(inputData);
-
+    let frontmatter = yamlFront.loadFront(inputData);
+    let data = Object.create({})
     // Include package.json version and homepage in template data:
-    data.nepentheVersion = version;
-    data.homepage = homepage;
+    data.nepentheVersion = frontmatter.nepentheVersion;
+    data.nepentheHomepage = frontmatter.nepentheHomepage;
 
     // Unfold midi repeats by default
     // if(data.midi && data.midi_unfold_repeats == undefined) {

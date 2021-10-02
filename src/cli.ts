@@ -18,7 +18,7 @@ const {version} = require("../package.json");
 function main() {
 
     const parser = new ArgumentParser({
-        description: "Engrave a nepenthe document into another format.",
+        description: "Engrave a Nepenthe document into another format.",
     });
     
     parser.add_argument("input-document", { nargs: 1, help: "A path to a Nepenthe document to be processed. (Use '-' for STDIN.)" })
