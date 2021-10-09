@@ -47,7 +47,7 @@ const modeMap: StringDict = {
  * @param context
  * @returns
  */
-export function extractGlobal(context: any) {
+export function extractGlobal(context: any): hbs.HelperDelegate {
     var inner = function extractGlobalHelper(options: any) {
         if (options !== undefined) {
             var content = options.fn(this);
@@ -73,7 +73,7 @@ export function extractGlobal(context: any) {
  * (https://github.com/helpers/handlebars-helper-variable)
  * for the nudge in the right direction.
  */
-export function extractParts(context: any) {
+export function extractParts(context: any): hbs.HelperDelegate {
     /**
      * Auto-generated Handlebars helper function that extracts any
      * `#part` block tags into the provided context object.
@@ -102,15 +102,15 @@ export function extractParts(context: any) {
  * @param part
  * @returns string
  */
-export function modeHelper(part: any) {
+export function modeHelper(part: any): string {
     if (part.mode in modeMap) {
-        return modeMap[part.mode];
+        return modeMap[part.mode]
     } else {
         throw new UnrecognizedModeError(`Unrecognized mode in part "${part.name}": ${part.mode}`);
     }
 }
 
-export function scoreHelper(options: any) {
+export function scoreHelper(options: any): hbs.SafeString {
     var context = Object.assign({}, options.hash, { scoreContent: options.fn });
     var scorePartial = hbs.partials["scorePartial"];
     scorePartial = hbs.compile(scorePartial, { compat: true });
@@ -125,7 +125,7 @@ export function scoreHelper(options: any) {
  * @param context
  * @returns hbs.SafeString
  */
-export function globalHelper(context: any) {
+export function globalHelper(context: any): hbs.HelperDelegate {
     // ('global' is already a SafeString)
     return context.data.root.global;
 }
@@ -141,7 +141,7 @@ export function globalHelper(context: any) {
  * @param options
  * @returns hbs.SafeString
  */
-export function banjo5thStrHelper(options: any) {
+export function banjo5thStrHelper(options: any): hbs.SafeString {
     var pitch = options.hash.pitch === undefined ? "g" : options.hash.pitch;
     var duration = options.hash.duration;
 

@@ -6,11 +6,11 @@
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "lib": ["es6", "es2015"],
-        "types": ["node"],
+        "types": ["node", "jest", "handlebars", "yaml-front-matter"],
         "declaration": true,
         "outDir": "../lib",
         "rootDir": "./",
-        "strict": true,
+        "strict": false,
         "noImplicitThis": false,
         "sourceMap": true
     },

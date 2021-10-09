@@ -14,16 +14,16 @@ import {
 
 interface EngraveArgs {
     'input-document':  string[],
-    output: string,
+    output_directory: string,
+    base_filename: string,
     format: OutputFormat,
     overwrite: false
 }
 
-
 /**
  * The default 'engrave' subcommand for nepenthe.
  */
-export function engrave(args: EngraveArgs) {
+export function engrave(args: EngraveArgs): any {
 
     // PREFLIGHT:
     // TODO:
@@ -77,21 +77,27 @@ export function engrave(args: EngraveArgs) {
     let base = hbs.compile(fs.readFileSync("./src/templates/base.hbs", "utf-8"));
     let lilypondData = base(data);
 
-    var baseOutputFilename = getBaseOutputFilename(args['input-document'][0], args.output)
-    console.log(baseOutputFilename)
-    if(args.output == '-') {
+    
+    if(args.base_filename == '-') {
         console.log(lilypondData)
     } else {
 
         // TODO:
-        // - Output file needs default value, which should be "{input file path}/{input file base name}.ly"
+
         // - Don't overwrite existing file if it exists unless `-y` flag is present
-        // - If supplied output filename already ends in an extension, parse that to derive format and don't append another extension to it
+
+        // - 2021-10-09 - refactor "getBaseOutputFilename" to accommodate the newer
+        //                   explicit "output_directory" and "base_path" CLI arguments:
+        //                   if base_filename == undefined, then isolate the input document filename minus extension
+        //                   final output file path should be `${output_directory}${base_filename}$}${args.format}` 
+
+        var baseOutputFilename = getBaseOutputFilename(args['input-document'][0], args.base_filename)
+        console.log(baseOutputFilename)
 
         let outputFileName = `${baseOutputFilename}.${args.format}`
 
         if(fs.existsSync(outputFileName) && !args.overwrite) {
-            console.error(`File '${outputFileName}' already exists. (Use '-o' to specify a different output file name, or '-y' to overwrite)`)
+            console.error(`File '${outputFileName}' already exists. (Use '-o' and/or '-b' to specify a different output file name, or '-y' to overwrite)`)
             process.exitCode = 1;
             return
         }

@@ -8,8 +8,8 @@
 var hbs = require("handlebars");
 var dateFormat = require("dateformat");
 var path = require("path");
-import fs from "fs";
-import yamlFront from "yaml-front-matter";
+const fs = require("fs")
+const yamlFront = require("yaml-front-matter")
 import { version as nepentheVersion, homepage as nepentheHomepage} from "../package.json";
 import { extractGlobal, extractParts, banjo5thStrHelper } from "./handlebars";
 
@@ -119,17 +119,16 @@ export function isWriteable(pathName: string): boolean {
 /**
  * Reads Nepenthe input and prepares it for rendering.
  * @param inputData
- * @returns
+ * @returns any
  */
-export function parseInput(inputData: string) {
+export function parseInput(inputData: string): any {
     // Create a `data` object by parsing the YAML front-matter.
     // `data` will eventually be used as the main Handlebars
     // context:
-    let frontmatter = yamlFront.loadFront(inputData);
-    let data = Object.create({})
+    let data = yamlFront.loadFront(inputData);
     // Include package.json version and homepage in template data:
-    data.nepentheVersion = frontmatter.nepentheVersion;
-    data.nepentheHomepage = frontmatter.nepentheHomepage;
+    data.nepentheVersion = nepentheVersion;
+    data.nepentheHomepage = nepentheHomepage;
 
     // Unfold midi repeats by default
     // if(data.midi && data.midi_unfold_repeats == undefined) {
@@ -144,19 +143,18 @@ export function parseInput(inputData: string) {
     // 'parts' dict that is put back into the main `data` dict:
     hbs.registerHelper("global", extractGlobal(data));
     hbs.registerHelper("part", extractParts(data));
-    hbs.registerHelper("banjo5thStr", banjo5thStrHelper);
-    hbs.registerPartial(
-        "banjo5thStrPartial",
-        fs.readFileSync("./src/templates/partials/banjo5thStr.hbs", "utf-8")
-    );
+    // hbs.registerHelper("banjo5thStr", banjo5thStrHelper);
+    // hbs.registerPartial(
+    //     "banjo5thStrPartial",
+    //     fs.readFileSync("./src/templates/partials/banjo5thStr.hbs", "utf-8")
+    // );
 
     // Compile `__content`. This will add the `parts` key to the `data` object,
-    hbs.compile(data.__content)();
+    hbs.compile(data.__content)
 
-    // The global and part block helpers are only used during this first pass; unregister them
+    // The global block helpers is only used during this first pass; unregister them
     hbs.unregisterHelper("global");
-    hbs.unregisterHelper("part");
-    hbs.unregisterHelper("banjo5thStr");
+    // hbs.unregisterHelper("banjo5thStr");
 
     // Return `__content` in the template context for further processing
     data["input"] = data.__content;
@@ -173,7 +171,7 @@ export function parseInput(inputData: string) {
  * @param fileName
  * @returns
  */
-export function parseInputFile(fileName: string) {
+export function parseInputFile(fileName: string): any {
     let fileData = fs.readFileSync(fileName, "utf-8");
     return parseInput(fileData);
 }
