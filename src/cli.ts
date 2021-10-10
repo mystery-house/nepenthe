@@ -26,7 +26,6 @@ function main() {
     parser.add_argument("-f", "--format", { help: "The output format. (Currently only `ly` is supported.)", default: "ly"});
     parser.add_argument("-y", "--overwrite", { help: "If set, existing output files will be automatically overwritten without warning. (Defaults to `false`.)", action: "store_true", default: false})
     var args = parser.parse_args()
-    console.log(args)
     engrave(args)
 }
 

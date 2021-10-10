@@ -10,8 +10,9 @@ var dateFormat = require("dateformat");
 var path = require("path");
 const fs = require("fs")
 const yamlFront = require("yaml-front-matter")
+import { EngraveArgs } from "./commands"
 import { version as nepentheVersion, homepage as nepentheHomepage} from "../package.json";
-import { extractGlobal, extractParts, banjo5thStrHelper } from "./handlebars";
+import { extractGlobal, extractParts } from "./handlebars";
 
 
 /**
@@ -27,6 +28,7 @@ export enum OutputFormat {
 
 /**
  * Enum used as return values by the pathType() function
+ * @deprecated
  */
 export enum PathType {
     FILE,
@@ -38,7 +40,7 @@ export enum PathType {
 /**
  * Helper function for determining whether a given path is a
  * file, directory, STDIO stream, or none of the above.
- *
+ * @deprecated This function is no longer used/needed with the newer CLI arg scheme
  * @param pathName
  * @returns
  */
@@ -67,7 +69,45 @@ export function pathType(pathName: string): PathType {
 
 
 /**
+ * Builds an output path based on arguments passed to the nepenthe engrave command.
+ * @param args 
+ * @returns 
+ * @throws TypeError
+ */
+export function getOutputFilename(args: EngraveArgs): string {
+
+    var outputDir = args.output_directory
+
+    // TODO use node equivalent of python os.pathsep instead of hard-coded '/' ?
+    if(outputDir.substr(outputDir.length - 1) != '/') {
+        outputDir += '/'
+    }
+
+    if(args.base_filename == '-') {
+        throw TypeError("Can't build an output filename when the base_filename argument is set to '-' for STDOUT")
+    }
+
+    var baseFilename = args.base_filename
+
+    if(baseFilename === undefined) {
+        var inputPath = args['input-document'][0]
+        if(inputPath == '-') {
+            baseFilename = dateFormat(new Date(), "yyyy-mm-dd_HH-MM");
+        }
+        else {
+            baseFilename = path.basename(inputPath, path.extname(inputPath));
+        }
+    }
+
+
+    return `${outputDir}${baseFilename}.${args.format}`
+
+}
+
+
+/**
  * Helper function for deriving the base filename for the file(s) to be generated.
+ * @deprecated args now have separate explicit options for output dir and base output filename; use getOutputFilename() instead
  * @param inputPath
  * @param output 
  * @param format 
@@ -95,7 +135,6 @@ export function getBaseOutputFilename(
         }
         finalBaseOutputPath = `${output.replace(/\/$/, "")}/${baseFilename}`;
     } else {
-        console.log(outputPathType)
         throw new Error(`Invalid output path: ${output}`);
     }
     return finalBaseOutputPath;
@@ -166,7 +205,7 @@ export function parseInput(inputData: string): any {
 }
 
 /**
- * Wrapper for the `parseInputFile` function which takes handles loading
+ * Wrapper for the `parseInput` function which takes handles loading
  * Nepenthe data from a given filename.
  * @param fileName
  * @returns
