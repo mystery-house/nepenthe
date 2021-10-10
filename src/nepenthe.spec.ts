@@ -27,13 +27,24 @@ describe("isWriteable function", () => {
 
 describe("getOutputPath function", () => {
 
+    test("It should use the base_filename arg if provided", () => {
+        var args = getArgumentParser().parse_args(['-b', 'my-custom-output-filename', 'input_file.nep'])
+        expect(getOutputFilename(args)).toEqual('./my-custom-output-filename.ly')
+
+    })
+
     test("It should throw a Type error when the base_filename arg is '-'", () => {
-        var args = getArgumentParser().parse_args(['-b', '-', 'input_file.ly'])
+        var args = getArgumentParser().parse_args(['-b', '-', 'input_file.nep'])
         expect(() => {getOutputFilename(args)}).toThrow(TypeError)
     })
 
-    test("It should add a trailing slash to the output directory if needed", () => {
-        var args = getArgumentParser().parse_args(['-o', '/tmp', 'test.ly'])
+    test("It should use the output_directory arg if provided", () => {
+        var args = getArgumentParser().parse_args(['-o', '/some/other/dir/', 'my-test.nep'])
+        expect(getOutputFilename(args)).toEqual('/some/other/dir/my-test.ly')
+    })
+
+    test("It should add a trailing slash to the output_directory arg if needed", () => {
+        var args = getArgumentParser().parse_args(['-o', '/tmp', 'test.nep'])
         expect(getOutputFilename(args)).toEqual('/tmp/test.ly')
     })
 
@@ -50,7 +61,7 @@ describe("getOutputPath function", () => {
     })
 
     test("It should use derive base_filename from the input filename if not otherwise specified.", () => {
-        var args = getArgumentParser().parse_args(['my-input-file.ly'])
+        var args = getArgumentParser().parse_args(['my-input-file.nep'])
         expect(getOutputFilename(args)).toEqual('./my-input-file.ly')
     })
 })
