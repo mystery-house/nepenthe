@@ -9,12 +9,11 @@ const { version, homepage } = require("../package.json");
 
 
 /**
- * The main Nepenthe CLI routine; executes when the `nepenthe` command is run
- * from a terminal.
+ * Configures an argparse object for use by the `nepenthe` command.
+ * @returns An argument parser for the `nepenthe` command
  */
-function main() {
-
-    const parser = new ArgumentParser({
+export function getArgumentParser(): ArgumentParser {
+    var parser = new ArgumentParser({
         description: `Engrave a Nepenthe document into another format.`,
         epilog: `Nepenthe v${version} - ${homepage}`
     });
@@ -25,10 +24,21 @@ function main() {
     parser.add_argument("-b", "--base-filename", {help: "The base filename to use for generated file(s). Use \"-\" to send output to STDOUT. Defaults to the input filename minus extension. If input is STDIN, defaults to the document title. If document title is unset, defaults to a timestamp."})
     parser.add_argument("-f", "--format", { help: "The output format. (Currently only `ly` is supported.)", default: "ly"});
     parser.add_argument("-y", "--overwrite", { help: "If set, existing output files will be automatically overwritten without warning. (Defaults to `false`.)", action: "store_true", default: false})
-    var args = parser.parse_args()
+
+    return parser
+}
+
+/**
+ * The main Nepenthe CLI routine; executes when the `nepenthe` command is run
+ * from a terminal.
+ */
+export default function main() {
+    var args = getArgumentParser().parse_args()
     engrave(args)
 }
 
+
+/* istanbul ignore next */
 // If the cli module has been imported by the `nepenthe` bin, run the main() function:
 if (require.main === module) {
     main();

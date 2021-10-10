@@ -9,6 +9,7 @@ var hbs = require("handlebars");
 var dateFormat = require("dateformat");
 var path = require("path");
 const fs = require("fs")
+
 const yamlFront = require("yaml-front-matter")
 import { EngraveArgs } from "./commands"
 import { version as nepentheVersion, homepage as nepentheHomepage} from "../package.json";
@@ -37,6 +38,7 @@ export enum PathType {
     INVALID,
 }
 
+/* istanbul ignore next */
 /**
  * Helper function for determining whether a given path is a
  * file, directory, STDIO stream, or none of the above.
@@ -69,7 +71,7 @@ export function pathType(pathName: string): PathType {
 
 
 /**
- * Builds an output path based on arguments passed to the nepenthe engrave command.
+ * Builds an output path based on arguments passed to the nepenthe command.
  * @param args 
  * @returns 
  * @throws TypeError
@@ -92,7 +94,7 @@ export function getOutputFilename(args: EngraveArgs): string {
     if(baseFilename === undefined) {
         var inputPath = args['input-document'][0]
         if(inputPath == '-') {
-            baseFilename = dateFormat(new Date(), "yyyy-mm-dd_HH-MM");
+            baseFilename = dateFormat(Date.now(), "yyyy-mm-dd_HH-MM");
         }
         else {
             baseFilename = path.basename(inputPath, path.extname(inputPath));
@@ -104,7 +106,7 @@ export function getOutputFilename(args: EngraveArgs): string {
 
 }
 
-
+/* istanbul ignore next */
 /**
  * Helper function for deriving the base filename for the file(s) to be generated.
  * @deprecated args now have separate explicit options for output dir and base output filename; use getOutputFilename() instead
@@ -150,6 +152,7 @@ export function isWriteable(pathName: string): boolean {
         fs.accessSync(pathName, fs.constants.W_OK);
         return true;
     } catch (err) {
+        console.debug(`${pathName} is not writeable.`)
         return false;
     }
 }
