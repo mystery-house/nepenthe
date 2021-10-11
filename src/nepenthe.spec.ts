@@ -73,7 +73,7 @@ describe("parseInputFile() function", () => {
     let self
     beforeEach(() => {
         self = {}
-        self.args = getArgumentParser().parse_args(['./Herbert Ellis - Firefly Jig.nep'])
+        self.args = getArgumentParser().parse_args(['./__tests__/Herbert Ellis - Firefly Jig.nep'])
         self.data = parseInputFile(self.args['input-document'][0])
     })
 
@@ -97,5 +97,5 @@ describe("parseInputFile() function", () => {
     test("The 'poet' prop should be undefined.", () => {
         expect('poet' in self.data).toEqual(false)
     })
-    
+
 })
