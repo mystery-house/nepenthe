@@ -15,6 +15,32 @@ import { EngraveArgs } from "./commands"
 import { version as nepentheVersion, homepage as nepentheHomepage} from "../package.json";
 import { extractGlobal, extractParts } from "./handlebars";
 
+/**
+ * An object as initially returned by the parseInput() function 
+ * from a .nep file or STDIN, with properties extracted from YAML 
+ * front-matter and the remaining document body in the 'input' property.
+ */
+export interface NepentheObject {
+    nepentheVersion: string,
+    nepentheHomepage: string,
+    title?: string,
+    subtitle?: string,
+    subsubtitle?: string,
+    version?: string,
+    composer?: string,
+    arranger?: string,
+    copyright?: string,
+    dedication?: string,
+    poet?: string,
+    meter?: string,
+    instrument?: string,
+    piece?: string,
+    opus?: string,
+    transpose?: string,
+    input: string,
+    content?: string  // This is where the "pre-render" stage of the nepenthe template is stored by the engrave() function
+}
+
 
 /**
  * Valid values for the --output-format CLI option
@@ -163,7 +189,7 @@ export function isWriteable(pathName: string): boolean {
  * @param inputData
  * @returns any
  */
-export function parseInput(inputData: string): any {
+export function parseInput(inputData: string): NepentheObject {
     // Create a `data` object by parsing the YAML front-matter.
     // `data` will eventually be used as the main Handlebars
     // context:
@@ -213,7 +239,7 @@ export function parseInput(inputData: string): any {
  * @param fileName
  * @returns
  */
-export function parseInputFile(fileName: string): any {
+export function parseInputFile(fileName: string): NepentheObject {
     let fileData = fs.readFileSync(fileName, "utf-8");
     return parseInput(fileData);
 }

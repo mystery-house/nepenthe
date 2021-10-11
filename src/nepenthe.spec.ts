@@ -1,11 +1,13 @@
 import { truncateSync } from "fs";
 import { getArgumentParser } from './cli';
-const { isWriteable, getOutputFilename } = require('./nepenthe')
+const { isWriteable, getOutputFilename, parseInput, parseInputFile } = require('./nepenthe')
 const { NepentheArgs } = require('./commands')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const tmp = require('tmp');
+import { version as nepentheVersion, homepage as nepentheHomepage} from "../package.json";
+
 
 const testPrefix = 'nepentheTest'
 
@@ -64,4 +66,36 @@ describe("getOutputPath function", () => {
         var args = getArgumentParser().parse_args(['my-input-file.nep'])
         expect(getOutputFilename(args)).toEqual('./my-input-file.ly')
     })
+})
+
+
+describe("parseInputFile() function", () => {
+    let self
+    beforeEach(() => {
+        self = {}
+        self.args = getArgumentParser().parse_args(['./Herbert Ellis - Firefly Jig.nep'])
+        self.data = parseInputFile(self.args['input-document'][0])
+    })
+
+    test("It should return an object with `nepentheVersion` and `nepentheHomepage` values matching the values in package.json", () => {
+        expect(self.data.nepentheVersion).toEqual(nepentheVersion)
+        expect(self.data.nepentheHomepage).toEqual(nepentheHomepage)        
+    })
+
+    test("It should have an 'input' property.", () => {
+        expect('input' in self.data).toEqual(true)
+    })
+
+    test("The 'title' prop should be 'Firefly Jig'.", () => {
+        expect(self.data.title).toEqual("Firefly Jig")
+    })
+
+    test("The 'composer' prop should be Herbert J. Ellis", () => {
+        expect(self.data.composer).toEqual("Herbert J. Ellis")
+    })
+
+    test("The 'poet' prop should be undefined.", () => {
+        expect('poet' in self.data).toEqual(false)
+    })
+    
 })

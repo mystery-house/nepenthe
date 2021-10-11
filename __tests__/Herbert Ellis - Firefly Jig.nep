@@ -1,0 +1,106 @@
+---
+version: 2.20.0
+title: Firefly Jig
+composer: Herbert J. Ellis
+arranger: arr. Andy Chase
+
+# TODO support for paper size/orientation in front-matter and/or score tag
+---
+{{#global}}
+    \key c \major
+    \time 2/4
+{{/global}}
+
+{{#part name="chords" mode="chord"}}
+    \set chordChanges = ##t
+    %A 
+    \repeat volta 2 {
+        c2 |
+        g2:7 |
+        c2 |
+        a4:min g4:7 |
+        c2 |
+        g2:7 |
+        c4 g4:7 |
+        c2 |
+    }
+
+    %B
+    \repeat volta 2 {
+        g2 |
+        c2 |
+        g2 |
+        a2: min |
+        g2 |
+        c2 |
+        a2:min |
+        g2 |
+    }
+{{/part}}
+
+{{#part name="firstBanjo" relative="c'"}}
+    \clef "treble_8"
+    %A
+    \repeat volta 2 {
+        <c e>16 g'\5 c,8  c16 d e c  |
+        <d f>16 {{{banjo5thStr duration="16"}}} d8 d16 e f d |
+        <c e>16 g'\5 c,8  c16 d e c  |
+        d16 c b a  g g'\5 f (d) |
+
+        <c e>16 g'\5 c,8  c16 d e c  |
+        <d f>16 g\5 d8 d16 e f d |
+        <c e>16 g'\5 c, e (d) f b, d |
+        
+        c8 [g \mark \markup {\smaller {"Fine."}} c,] r8  |
+    }
+
+    %B
+    \key g \major
+    \repeat volta 2 {
+        <b' d>16 g'\5 <b, d>8  <b d>16 g'\5 <b, d>8 |
+        <c e>16 g'\5 <c, e> g'\5 <c, e>8 g'\5 |
+        <b, d>16 g'\5 <b, d>8  <b d>16 g'\5 <b, d>8 |
+        a16 d c d d,8 d' |
+        <b d>16 g'\5 <b, d>8  <b d>16 g'\5 <b, d>8 |
+        <c e>16 g'\5 <c, e> g'\5 <c, e>8 g'\5 |
+        a,16 d c d d, d' c d |
+        g,16 d' b d \mark \markup {\smaller {"D.C."}} g8\5 r8  |
+    }
+{{/part}}
+
+{{#part name="secondBanjo" relative="c"}}
+    %A
+ 
+    \clef "treble_8"
+    \repeat volta 2 {
+        c8 <g' c e> c, <g' c e> |
+        d <g d' f> d <g d' f> |
+        c,8 <g' c e> c, <g' c e> |
+        <a c d> <a c d> <g b d> <g b f'> |
+        c,8 <g' c e> c, <g' c e> |
+        d <g d' f> d <g d' f> |
+        c,8 <g' c e> d <g d' f>
+        c, [<g' c e>  <g c e>] r8 |
+    }
+
+    %B
+    \key g \major
+    \repeat volta 2 {
+        <g b d>8 <g b d> <g b d> <g b d>  |
+        <g c e> <g c e> <g c e> <g c e> |
+        <g b d>8 <g b d> <g b d> <g b d>  |
+        <a c d>  <a c d>  <a c d>  <a c d> |
+        <g b d>8 <g b d> <g b d> <g b d>  |
+        <g c e> <g c e> <g c e> <g c e> |
+        <a c d>  <a c d>  <a c d>  <a c d> |
+        <g b d>8 <g b d> <g b d> r8  |
+    }
+{{/part}}
+
+% TODO "unfoldRepeats" score attribute
+% TODO "midi" score attribute
+{{#score name="notation"}}
+    {{staff part="chords" type="chordnames"}}
+    {{staff part="firstBanjo"}}
+    {{staff part="secondBanjo"}}
+{{/score}}
