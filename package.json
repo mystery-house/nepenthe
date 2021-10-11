@@ -42,5 +42,17 @@
     "start:debug": "node --inspect -r ts-node/register lib/cli.js",
     "test": "TZ=UTC jest --silent",
     "test:coverage": "TZ=UTC jest --silent --coverage"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "roots": [
+      "<rootDir>/src/"
+    ]
   }
 }
