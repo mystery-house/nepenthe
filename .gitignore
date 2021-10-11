@@ -6,3 +6,7 @@ test.*
 coverage/
 src/.node_repl_history
 src/.bash_history
+yarn-error.log
+coverage/
+.DS_Store
+*.tsbuildinfo

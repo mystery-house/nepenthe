@@ -40,8 +40,8 @@
     "start": "node lib/cli.js",
     "start:break": "node --inspect-brk -r ts-node/register lib/cli.js",
     "start:debug": "node --inspect -r ts-node/register lib/cli.js",
-    "test": "TZ=UTC jest --silent",
-    "test:coverage": "TZ=UTC jest --silent --coverage"
+    "test": "TZ=UTC jest --silent --no-cache",
+    "test:coverage": "TZ=UTC jest --silent --coverage --no-cache"
   },
   "jest": {
     "preset": "ts-jest",
@@ -50,9 +50,6 @@
     "verbose": true,
     "testPathIgnorePatterns": [
       "/node_modules/"
-    ],
-    "roots": [
-      "<rootDir>/src/"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { truncateSync } from "fs";
-import { getArgumentParser } from './cli';
-const { isWriteable, getOutputFilename, parseInput, parseInputFile } = require('./nepenthe')
-const { NepentheArgs } = require('./commands')
+import { getArgumentParser } from '../src/cli';
+const { isWriteable, getOutputFilename, parseInput, parseInputFile } = require('../src/nepenthe')
+const { NepentheArgs } = require('../src/commands')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')

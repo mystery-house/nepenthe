@@ -1,4 +1,4 @@
-import main, { getArgumentParser } from './cli';
+import main, { getArgumentParser } from '../src/cli';
 
 
 describe("getArgumentParser() function", () => {
