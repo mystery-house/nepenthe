@@ -34,8 +34,7 @@
   ],
   "scripts": {
     "build": "tsc --build src && chmod a+x lib/cli.js",
-    "build:production": "tsc --project src/tsconfig.production.json && chmod a+x lib/cli.js",
-    "build:check": "tsc --build --noEmit",
+    "build:check": "tsc --build src --noEmit",
     "clean": "rm -rf lib/*",
     "dev": "ts-node src/cli.ts",
     "start": "node lib/cli.js",

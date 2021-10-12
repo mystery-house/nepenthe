@@ -4,17 +4,17 @@ import * as CommandFactory from '../src/commands'
 
 describe("getArgumentParser() function", () => {
     test("Output directory should default to './'", () => {
-        var args = getArgumentParser().parse_args(['test.nep'])
+        var args = getArgumentParser().parse_args(['./__tests__/Herbert Ellis - Firefly Jig.nep'])
         expect(args.output_directory).toEqual('./')
     })
 
     test("Output format should default to 'ly'", () => {
-        var args = getArgumentParser().parse_args(['test.nep'])
+        var args = getArgumentParser().parse_args(['./__tests__/Herbert Ellis - Firefly Jig.nep'])
         expect(args.format).toEqual('ly')
     })
 
     test("Overwrite should default to false.", () => {
-        var args = getArgumentParser().parse_args(['test.nep'])
+        var args = getArgumentParser().parse_args(['./__tests__/Herbert Ellis - Firefly Jig.nep'])
         expect(args.overwrite).toEqual(false)
     })
 
@@ -41,13 +41,13 @@ describe("main() function", () => {
     test("It should call engrave() with parsed arguments when called with an input filename", () => {
 
         const actualArgv = process.argv
-        process.argv = [...actualArgv.slice(0, 2), '-o', '/tmp', 'test.nep']
+        process.argv = [...actualArgv.slice(0, 2), '-o', '/tmp', './__tests__/Herbert Ellis - Firefly Jig.nep']
 
         const mockEngrave = jest.spyOn(CommandFactory, 'engrave')
 
         main()
 
-        expect(mockEngrave).toHaveBeenCalledWith(expect.objectContaining({output_directory: '/tmp', format: 'ly', 'input-document':['test.nep']}))
+        expect(mockEngrave).toHaveBeenCalledWith(expect.objectContaining({output_directory: '/tmp', format: 'ly', 'input-document':['./__tests__/Herbert Ellis - Firefly Jig.nep']}))
 
         mockEngrave.mockRestore()
         process.argv = actualArgv
