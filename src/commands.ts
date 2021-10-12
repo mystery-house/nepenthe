@@ -34,6 +34,7 @@ export function engrave(args: EngraveArgs): any {
     // - If lilypond binary is not found and user has requested a graphic output format, throw an error
     var lilypond = commandExists.sync('lilypond')
     if(lilypond === false) {
+        /* istanbul ignore else */ // TODO re-enable testing if/when PDF/PNG/SVG output formats
         if(args.format == OutputFormat.LILYPOND) {
             console.warn("Could not find lilypond.")
         }        
@@ -93,6 +94,7 @@ export function engrave(args: EngraveArgs): any {
             return
         }
 
+        /* istanbul ignore else */ // TODO re-enable testing if/when PDF/PNG/SVG output formats
         if(args.format == 'ly') {
             fs.writeFileSync(outputFileName, lilypondData)
         } else {

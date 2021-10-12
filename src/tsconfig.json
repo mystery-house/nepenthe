@@ -10,8 +10,8 @@
         "declaration": true,
         "outDir": "../lib",
         "rootDir": "./",
-        "strict": false,
-        "noImplicitThis": false,
+        "strict": true,
+        "noImplicitThis": true,
         "sourceMap": true
     },
     "references": [
