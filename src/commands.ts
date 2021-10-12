@@ -1,9 +1,11 @@
-import fs from "fs";
+const fs = require("fs")
 import path from "path";
 import hbs from "handlebars";
-
 import { parseInputFile, OutputFormat, getOutputFilename } from "./nepenthe";
-var hasbin = require("hasbin");
+//const hasbin = require("hasbin");
+var commandExists = require("command-exists")
+
+
 import {
     modeHelper,
     scoreHelper,
@@ -31,7 +33,7 @@ export function engrave(args: EngraveArgs): any {
     // - Function to check for / initialize config file
     // - If lilypond binary is found but not in ~/.config/nepenthe/nepenthe_config.json, then add it
     // - If lilypond binary is not found and user has requested a graphic output format, throw an error
-    var lilypond = hasbin.first.sync(['lilypond'])
+    var lilypond = commandExists.sync('lilypond')
     if(lilypond === false) {
         if(args.format == OutputFormat.LILYPOND) {
             console.warn("Could not find lilypond.")

@@ -130,6 +130,7 @@ export function globalHelper(context: any): hbs.HelperDelegate {
     return context.data.root.global;
 }
 
+/* istanbul ignore next */ // (this tag is unstable/WIP)
 /**
  * This helper attempts to represent conventional notation for the fifth string of
  * a five-string banjo, which is the G note of the desired duration with an additional
