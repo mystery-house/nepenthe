@@ -1,4 +1,3 @@
-import hasbin from "hasbin";
 import { getArgumentParser } from "../src/cli"
 import { engrave } from "../src/commands";
 import { getOutputFilename, parseInputFile } from "../src/nepenthe"

@@ -2,7 +2,6 @@ const fs = require("fs")
 import path from "path";
 import hbs from "handlebars";
 import { parseInputFile, OutputFormat, getOutputFilename } from "./nepenthe";
-//const hasbin = require("hasbin");
 var commandExists = require("command-exists")
 
 
